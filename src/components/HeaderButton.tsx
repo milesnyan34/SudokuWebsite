@@ -23,3 +23,4 @@ export const HeaderButton = ({ page, text }: { page: AppPage; text: string }) =>
         </button>
     );
 };
+    
