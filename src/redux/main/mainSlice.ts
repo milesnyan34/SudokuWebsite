@@ -1,13 +1,31 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-type MainState = object;
+/**
+ * Current page for the app
+ */
+export enum AppPage {
+    Create,
+    Solve
+}
 
-const initialState: MainState = {};
+type MainState = {
+    page: AppPage;
+};
+
+const initialState: MainState = {
+    page: AppPage.Create
+};
 
 export const mainSlice = createSlice({
     name: "main",
     initialState,
-    reducers: {}
+    reducers: {
+        setPage(state, action: PayloadAction<AppPage>) {
+            state.page = action.payload;
+        }
+    }
 });
+
+export const { setPage } = mainSlice.actions;
 
 export default mainSlice.reducer;
