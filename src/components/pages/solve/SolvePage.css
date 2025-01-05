@@ -31,7 +31,8 @@
     width: 64px;
     height: 64px;
     border: 1px solid black;
-    font-size: 24px;
+    font-size: 32px;
+    user-select: none;
 }
 
 .solve-tile:hover {
