@@ -1,4 +1,4 @@
-import { GRID_SIZE, range } from "../../../utils";
+import { BOX_SIZE, range } from "../../../utils";
 import "./SolvePage.css";
 import { SolveTile } from "./SolveTile";
 
@@ -6,14 +6,22 @@ const SolvePage = () => {
     return (
         <div id="solve-page" className="flex-center">
             <div id="solve-grid">
-                {range(0, GRID_SIZE - 1).map((row) => (
-                    <div className="grid-row" key={row}>
-                        {range(0, GRID_SIZE - 1).map((column) => (
-                            <SolveTile
-                                key={row * GRID_SIZE + column}
-                                row={row}
-                                column={column}
-                            />
+                {range(0, BOX_SIZE - 1).map((boxRow) => (
+                    <div className="grid-row" key={boxRow}>
+                        {range(0, BOX_SIZE - 1).map((boxColumn) => (
+                            <div className="grid-box" key={boxColumn}>
+                                {range(0, BOX_SIZE - 1).map((row) => (
+                                    <div className="box-row" key={row}>
+                                        {range(0, BOX_SIZE - 1).map((column) => (
+                                            <SolveTile
+                                                key={column}
+                                                row={boxRow * BOX_SIZE + row}
+                                                column={boxColumn * BOX_SIZE + column}
+                                            />
+                                        ))}
+                                    </div>
+                                ))}
+                            </div>
                         ))}
                     </div>
                 ))}

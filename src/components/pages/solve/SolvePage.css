@@ -11,9 +11,15 @@
     border: 1px solid black;
 }
 
-.grid-row {
+.grid-row, .box-row {
     display: flex;
     flex-direction: row;
+}
+
+.grid-box {
+    display: flex;
+    flex-direction: column;
+    border: 2px solid black;
 }
 
 .solve-tile {
