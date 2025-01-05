@@ -1,9 +1,16 @@
+// State of a solve tile
+export enum TileState {
+    SET, // Tile has a preset value
+    EMPTY, // Tile is empty
+    FILLED // Tile has a guess made
+}
+
 /**
  * Represents a tile in the Sudoku grid for the Solve page
  */
 export interface SolveTile {
-    startValue: number;
-    hasStartValue: boolean;
+    state: TileState;
+    value: number;
 }
 
 export const SolveTile = ({
@@ -13,6 +20,6 @@ export const SolveTile = ({
     startValue?: number;
     hasStartValue?: boolean;
 }): SolveTile => ({
-    startValue,
-    hasStartValue
+    value: startValue,
+    state: hasStartValue ? TileState.SET : TileState.EMPTY
 });

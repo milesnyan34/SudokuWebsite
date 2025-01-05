@@ -3,6 +3,7 @@ import "./SolvePage.css";
 import { SolveTile } from "./SolveTile";
 
 const SolvePage = () => {
+    // The 9x9 grid is basically a 3x3 grid of 3x3 boxes
     return (
         <div id="solve-page" className="flex-center">
             <div id="solve-grid">
