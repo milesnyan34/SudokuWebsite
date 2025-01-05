@@ -1,9 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import mainReducer from "./main/mainSlice";
+import solveReducer from "./solve/solveSlice";
 
 export const store = configureStore({
     reducer: {
-        main: mainReducer
+        main: mainReducer,
+        solve: solveReducer
     }
 });
 
