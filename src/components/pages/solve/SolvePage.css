@@ -11,7 +11,8 @@
     border: 1px solid black;
 }
 
-.grid-row, .box-row {
+.grid-row,
+.box-row {
     display: flex;
     flex-direction: row;
 }
@@ -22,9 +23,17 @@
     border: 2px solid black;
 }
 
+.grid-box:hover {
+    border: 2px solid white;
+}
+
 .solve-tile {
     width: 64px;
     height: 64px;
     border: 1px solid black;
     font-size: 24px;
+}
+
+.solve-tile:hover {
+    border: 1px solid white;
 }
