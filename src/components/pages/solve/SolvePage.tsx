@@ -1,6 +1,6 @@
 const SolvePage = () => {
     return <div>
-        Solve
+        
     </div>
 }
 
