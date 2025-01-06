@@ -13,7 +13,7 @@ import { removeValue, updateValue } from "../../../redux/solve/solveSlice";
 // When the tile is set, it cannot be clicked on
 // When the tile is not set, the user can click on it to access a text box, letting them change its value
 // When the user clicks outside of the tile or enters a number, save that number and apply effects
-export const SolveTile = ({ row, column }: { row: number; column: number }) => {
+export const SolveTileComponent = ({ row, column }: { row: number; column: number }) => {
     const solveData = useSelector(selectSolveTile(row, column));
     const value = solveData.value;
     const isSet = useSelector(selectIsTileSet(row, column));
@@ -89,6 +89,7 @@ export const SolveTile = ({ row, column }: { row: number; column: number }) => {
                 active && "solve-tile-active"
             )}
             onClick={onClicked}
+            data-testid={`solve-tile-${row}-${column}`}
         >
             {active ? (
                 <input

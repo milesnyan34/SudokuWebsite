@@ -1,6 +1,6 @@
 import { BOX_SIZE, range } from "../../../utils";
 import "./SolvePage.css";
-import { SolveTile } from "./SolveTile";
+import { SolveTileComponent } from "./SolveTileComponent";
 
 const SolvePage = () => {
     // The 9x9 grid is basically a 3x3 grid of 3x3 boxes
@@ -14,7 +14,7 @@ const SolvePage = () => {
                                 {range(0, BOX_SIZE - 1).map((row) => (
                                     <div className="box-row" key={row}>
                                         {range(0, BOX_SIZE - 1).map((column) => (
-                                            <SolveTile
+                                            <SolveTileComponent
                                                 key={column}
                                                 row={boxRow * BOX_SIZE + row}
                                                 column={boxColumn * BOX_SIZE + column}

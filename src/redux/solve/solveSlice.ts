@@ -20,7 +20,7 @@ const createGrid = (): Grid<SolveTile> => {
 };
 
 // Creates a sudoku grid with the values at the given tiles
-const createSudokuGrid = (currentGrid: Grid<number>): Grid<SolveTile> => {
+export const createSudokuGrid = (currentGrid: Grid<number>): Grid<SolveTile> => {
     const grid = createGrid();
 
     for (let i = 0; i < GRID_SIZE; i++) {
@@ -38,9 +38,9 @@ const createSudokuGrid = (currentGrid: Grid<number>): Grid<SolveTile> => {
     return grid;
 };
 
-// Creates the initial state for the sudoku
-export const createInitialState = (): SolveState => ({
-    grid: createSudokuGrid([
+// Creates an empty sudoku grid
+export const createEmptyGrid = (): Grid<SolveTile> =>
+    createSudokuGrid([
         [0, 0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -50,7 +50,11 @@ export const createInitialState = (): SolveState => ({
         [0, 0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0, 0]
-    ])
+    ]);
+
+// Creates the initial state for the sudoku
+export const createInitialState = (): SolveState => ({
+    grid: createEmptyGrid()
 });
 
 const initialState = createInitialState();
@@ -92,10 +96,24 @@ export const solveSlice = createSlice({
                 value: 0,
                 state: TileState.EMPTY
             };
+        },
+
+        // Sets the grid
+        setGrid(state: SolveState, action: PayloadAction<Grid<SolveTile>>) {
+            state.grid = action.payload;
+        },
+
+        // Sets the value at a given position (mainly for testing)
+        setGridAt(state: SolveState, action: PayloadAction<{
+            row: number;
+            column: number;
+            tile: SolveTile;
+        }>) {
+            state.grid[action.payload.row][action.payload.column] = action.payload.tile;
         }
     }
 });
 
-export const { removeValue, updateValue } = solveSlice.actions;
+export const { removeValue, setGrid, setGridAt, updateValue } = solveSlice.actions;
 
 export default solveSlice.reducer;
