@@ -1,4 +1,4 @@
-import { range } from "../utils";
+import { range } from "./utils";
 
 describe("utils", () => {
     test("range", () => {
