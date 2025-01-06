@@ -38,19 +38,22 @@ const createSudokuGrid = (currentGrid: Grid<number>): Grid<SolveTile> => {
     return grid;
 };
 
-const initialState: SolveState = {
+// Creates the initial state for the sudoku
+export const createInitialState = (): SolveState => ({
     grid: createSudokuGrid([
-        [1, 0, 0, 0, 0, 0, 0, 5, 7],
-        [2, 4, 6, 0, 3, 5, 0, 0, 0],
-        [0, 0, 0, 0, 0, 7, 0, 0, 9],
-        [0, 0, 5, 0, 0, 0, 8, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 1, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 9, 6, 0, 0],
-        [0, 0, 0, 0, 1, 0, 0, 0, 0],
-        [0, 0, 0, 2, 4, 0, 0, 8, 0]
+        [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0]
     ])
-};
+});
+
+const initialState = createInitialState();
 
 export const solveSlice = createSlice({
     name: "solve",
