@@ -42,6 +42,7 @@
 .solve-tile-unset {
     cursor: grab;
     user-select: text;
+    color: rgb(50, 50, 50);
 }
 
 .solve-tile-unset:hover {
@@ -59,5 +60,5 @@
     border: 0px;
     text-align: center;
     font-size: 32px;
-    color: rgb(75, 75, 75);
+    color: rgb(50, 50, 50);
 }

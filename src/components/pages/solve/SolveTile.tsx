@@ -2,8 +2,11 @@ import classNames from "classnames";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useDetectClickOutside } from "../../../hooks/useDetectClickOutside";
-import { selectIsTileSet, selectSolveTile } from "../../../redux/selectors";
-import { TileState } from "../../../redux/solve/SolveTile";
+import {
+    selectIsTileEmpty,
+    selectIsTileSet,
+    selectSolveTile
+} from "../../../redux/selectors";
 import { removeValue, updateValue } from "../../../redux/solve/solveSlice";
 
 // Tile for the solve page
@@ -14,6 +17,7 @@ export const SolveTile = ({ row, column }: { row: number; column: number }) => {
     const solveData = useSelector(selectSolveTile(row, column));
     const value = solveData.value;
     const isSet = useSelector(selectIsTileSet(row, column));
+    const isEmpty = useSelector(selectIsTileEmpty(row, column));
 
     const dispatch = useDispatch();
 
@@ -75,22 +79,6 @@ export const SolveTile = ({ row, column }: { row: number; column: number }) => {
         return () => document.removeEventListener("keydown", onKeyPressed);
     }, [dispatch, active, row, column]);
 
-    // Resolves the value of the effect
-    // const resolveValue = () => {
-    //     if (inputValue.length === 1 && "123456789".includes(inputValue)) {
-    //         // Value was a success, so update that part of the grid
-    //         dispatch(
-    //             updateValue({
-    //                 row,
-    //                 column,
-    //                 value: parseInt(inputValue)
-    //             })
-    //         );
-    //     }
-
-    //     setInputValue("");
-    // };
-
     return (
         <div
             ref={ref}
@@ -106,9 +94,9 @@ export const SolveTile = ({ row, column }: { row: number; column: number }) => {
                 <input
                     autoFocus
                     className="solve-tile-input"
-                    placeholder={value === 0 ? "" : value.toString()}
+                    placeholder={isEmpty ? "" : value.toString()}
                 />
-            ) : solveData.state === TileState.EMPTY ? (
+            ) : isEmpty ? (
                 ""
             ) : (
                 solveData.value

@@ -18,3 +18,10 @@ export const selectIsTileSet = (row: number, column: number) =>
         [selectSolveTile(row, column)],
         (solveTile) => solveTile.state === TileState.SET
     );
+
+// Is the tile at the given position empty?
+export const selectIsTileEmpty = (row: number, column: number) =>
+    createSelector(
+        [selectSolveTile(row, column)],
+        (solveTile) => solveTile.state === TileState.EMPTY
+    );
