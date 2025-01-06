@@ -38,3 +38,26 @@
 .solve-tile:hover {
     border: 1px solid white;
 }
+
+.solve-tile-unset {
+    cursor: grab;
+    user-select: text;
+}
+
+.solve-tile-unset:hover {
+    background-color: rgb(145, 145, 145);
+}
+
+.solve-tile-active {
+    background-color: rgb(155, 155, 155);
+}
+
+.solve-tile-input {
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0);
+    border: 0px;
+    text-align: center;
+    font-size: 32px;
+    color: rgb(75, 75, 75);
+}

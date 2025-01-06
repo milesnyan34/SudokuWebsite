@@ -1,5 +1,5 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { SolveTile } from "./SolveTile";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { SolveTile, TileState } from "./SolveTile";
 import { Grid, GRID_SIZE } from "../../utils";
 
 type SolveState = {
@@ -55,7 +55,44 @@ const initialState: SolveState = {
 export const solveSlice = createSlice({
     name: "solve",
     initialState,
-    reducers: {}
+    reducers: {
+        // Updates the value at the given position
+        updateValue(
+            state: SolveState,
+            action: PayloadAction<{
+                row: number;
+                column: number;
+                value: number;
+            }>
+        ) {
+            const { row, column, value } = action.payload;
+
+            state.grid[row][column] = {
+                ...state.grid[row][column],
+                value,
+                state: TileState.FILLED
+            };
+        },
+
+        // Removes the value from the given position
+        removeValue(
+            state: SolveState,
+            action: PayloadAction<{
+                row: number;
+                column: number;
+            }>
+        ) {
+            const { row, column } = action.payload;
+
+            state.grid[row][column] = {
+                ...state.grid[row][column],
+                value: 0,
+                state: TileState.EMPTY
+            };
+        }
+    }
 });
+
+export const { removeValue, updateValue } = solveSlice.actions;
 
 export default solveSlice.reducer;
