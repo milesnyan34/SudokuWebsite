@@ -1,4 +1,6 @@
-// State of a solve tile
+/**
+ * State of a SolveTile
+ */
 export enum TileState {
     SET, // Tile has a preset value
     EMPTY, // Tile is empty

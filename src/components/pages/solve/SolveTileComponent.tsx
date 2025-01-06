@@ -9,10 +9,14 @@ import {
 } from "../../../redux/selectors";
 import { removeValue, updateValue } from "../../../redux/solve/solveSlice";
 
-// Tile for the solve page
-// When the tile is set, it cannot be clicked on
-// When the tile is not set, the user can click on it to access a text box, letting them change its value
-// When the user clicks outside of the tile or enters a number, save that number and apply effects
+/**
+* Tile for the solve page
+* When the tile is set, it cannot be clicked on
+* When the tile is not set, the user can click on it to access a text box, letting them change its value
+* When the user clicks outside of the tile or enters a number, save that number and apply effects
+ * @param param0 
+ * @returns 
+ */
 export const SolveTileComponent = ({ row, column }: { row: number; column: number }) => {
     const solveData = useSelector(selectSolveTile(row, column));
     const value = solveData.value;

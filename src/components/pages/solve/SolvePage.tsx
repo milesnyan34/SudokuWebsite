@@ -2,6 +2,10 @@ import { BOX_SIZE, range } from "../../../utils";
 import "./SolvePage.css";
 import { SolveTileComponent } from "./SolveTileComponent";
 
+/**
+ * Component for the Solve Sudoku page
+ * @returns 
+ */
 const SolvePage = () => {
     // The 9x9 grid is basically a 3x3 grid of 3x3 boxes
     return (

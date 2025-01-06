@@ -1,6 +1,10 @@
 import { useEffect } from "react"
 
-// Ref that detects clicks outside of a component
+/**
+ * Hook that detects clicks outside of a component. You need to provide a ref and put it in the component
+ * @param ref 
+ * @param onClick 
+ */
 export const useDetectClickOutside = (ref, onClick) => {
     useEffect(() => {
         const handleClickOutside = event => {

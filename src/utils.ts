@@ -1,13 +1,21 @@
-// Size of the grid
+/**
+ * Size of the grid (rows and columns)
+ */
 export const GRID_SIZE = 9;
 
-// Size of a box
+/**
+ * Size of a box
+ */
 export const BOX_SIZE = 3;
 
-// Grid data type
+/**
+ * Represents a 2D grid of values
+ */
 export type Grid<T> = Array<Array<T>>;
 
-// Returns a range from low to high (inclusive)
+/**
+ * Returns a range from low to high (inclusive)
+ */
 export const range = (low: number, high: number): Array<number> => {
     const result = [];
 

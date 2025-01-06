@@ -63,7 +63,11 @@ export const solveSlice = createSlice({
     name: "solve",
     initialState,
     reducers: {
-        // Updates the value at the given position
+        /**
+         * Updates the value at the given position
+         * @param state 
+         * @param action 
+         */
         updateValue(
             state: SolveState,
             action: PayloadAction<{
@@ -81,7 +85,11 @@ export const solveSlice = createSlice({
             };
         },
 
-        // Removes the value from the given position
+        /**
+         * Removes the value from the given position
+         * @param state 
+         * @param action 
+         */
         removeValue(
             state: SolveState,
             action: PayloadAction<{
@@ -98,12 +106,20 @@ export const solveSlice = createSlice({
             };
         },
 
-        // Sets the grid
+        /**
+         * Sets the grid (mainly for testing)
+         * @param state 
+         * @param action 
+         */
         setGrid(state: SolveState, action: PayloadAction<Grid<SolveTile>>) {
             state.grid = action.payload;
         },
 
-        // Sets the value at a given position (mainly for testing)
+        /**
+         * Sets the value at a given position (mainly for testing)
+         * @param state 
+         * @param action 
+         */
         setGridAt(state: SolveState, action: PayloadAction<{
             row: number;
             column: number;
