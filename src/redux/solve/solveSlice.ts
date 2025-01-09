@@ -66,6 +66,7 @@ export const detectErrors = (grid: Grid<SolveTile>): Grid<SolveTile> => {
 
     for (let i = 0; i < GRID_SIZE; i++) {
         changes.push(
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
             new Array(GRID_SIZE).fill(0).map((_) => ({
                 causesError: false,
                 inError: false,
@@ -203,19 +204,20 @@ const initialState = createInitialState();
 
 export const solveSlice = createSlice({
     name: "solve",
-    initialState: Object.assign(initialState, {
-        grid: createSudokuGrid([
-            [0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 1, 5, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 3, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 7, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 2, 0],
-            [0, 0, 0, 0, 0, 0, 8, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0]
-        ])
-    }),
+    // initialState: Object.assign(initialState, {
+    //     grid: createSudokuGrid([
+    //         [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    //         [0, 1, 5, 0, 0, 0, 0, 0, 0],
+    //         [0, 0, 0, 0, 3, 0, 0, 0, 0],
+    //         [0, 0, 0, 0, 0, 7, 0, 0, 0],
+    //         [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    //         [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    //         [0, 0, 0, 0, 0, 0, 0, 2, 0],
+    //         [0, 0, 0, 0, 0, 0, 8, 0, 0],
+    //         [0, 0, 0, 0, 0, 0, 0, 0, 0]
+    //     ])
+    // }),
+    initialState,
     reducers: {
         /**
          * Updates the value at the given position
