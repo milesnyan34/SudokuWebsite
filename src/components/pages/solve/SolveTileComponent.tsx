@@ -10,18 +10,20 @@ import {
 import { removeValue, updateValue } from "../../../redux/solve/solveSlice";
 
 /**
-* Tile for the solve page
-* When the tile is set, it cannot be clicked on
-* When the tile is not set, the user can click on it to access a text box, letting them change its value
-* When the user clicks outside of the tile or enters a number, save that number and apply effects
- * @param param0 
- * @returns 
+ * Tile for the solve page
+ * When the tile is set, it cannot be clicked on
+ * When the tile is not set, the user can click on it to access a text box, letting them change its value
+ * When the user clicks outside of the tile or enters a number, save that number and apply effects
+ * @param param0
+ * @returns
  */
 export const SolveTileComponent = ({ row, column }: { row: number; column: number }) => {
     const solveData = useSelector(selectSolveTile(row, column));
     const value = solveData.value;
     const isSet = useSelector(selectIsTileSet(row, column));
     const isEmpty = useSelector(selectIsTileEmpty(row, column));
+    const causesError = solveData.causesError;
+    const inError = solveData.inError;
 
     const dispatch = useDispatch();
 
@@ -83,14 +85,16 @@ export const SolveTileComponent = ({ row, column }: { row: number; column: numbe
         return () => document.removeEventListener("keydown", onKeyPressed);
     }, [dispatch, active, row, column]);
 
+    // The tile contains an input element if it is active, otherwise it displays the current number
     return (
         <div
             ref={ref}
             className={classNames(
                 "solve-tile",
                 "flex-center",
-                !isSet && "solve-tile-unset",
-                active && "solve-tile-active"
+                isSet ? "solve-tile-set" : "solve-tile-unset", // Set/unset tiles
+                active && "solve-tile-active", // The active tile
+                causesError ? "solve-tile-error-source" : inError ? "solve-tile-error" : "" // Error tiles
             )}
             onClick={onClicked}
             data-testid={`solve-tile-${row}-${column}`}

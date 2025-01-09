@@ -61,12 +61,24 @@ const initialState = createInitialState();
 
 export const solveSlice = createSlice({
     name: "solve",
-    initialState,
+    initialState: Object.assign(initialState, {
+        grid: createSudokuGrid([
+            [0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 1, 5, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 3, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 7, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 2, 0],
+            [0, 0, 0, 0, 0, 0, 8, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0]
+        ])
+    }),
     reducers: {
         /**
          * Updates the value at the given position
-         * @param state 
-         * @param action 
+         * @param state
+         * @param action
          */
         updateValue(
             state: SolveState,
@@ -87,8 +99,8 @@ export const solveSlice = createSlice({
 
         /**
          * Removes the value from the given position
-         * @param state 
-         * @param action 
+         * @param state
+         * @param action
          */
         removeValue(
             state: SolveState,
@@ -108,8 +120,8 @@ export const solveSlice = createSlice({
 
         /**
          * Sets the grid (mainly for testing)
-         * @param state 
-         * @param action 
+         * @param state
+         * @param action
          */
         setGrid(state: SolveState, action: PayloadAction<Grid<SolveTile>>) {
             state.grid = action.payload;
@@ -117,14 +129,17 @@ export const solveSlice = createSlice({
 
         /**
          * Sets the value at a given position (mainly for testing)
-         * @param state 
-         * @param action 
+         * @param state
+         * @param action
          */
-        setGridAt(state: SolveState, action: PayloadAction<{
-            row: number;
-            column: number;
-            tile: SolveTile;
-        }>) {
+        setGridAt(
+            state: SolveState,
+            action: PayloadAction<{
+                row: number;
+                column: number;
+                tile: SolveTile;
+            }>
+        ) {
             state.grid[action.payload.row][action.payload.column] = action.payload.tile;
         }
     }

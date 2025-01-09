@@ -10,9 +10,11 @@ export enum TileState {
 /**
  * Represents a tile in the Sudoku grid for the Solve page
  */
-export interface SolveTile {
+export type SolveTile = {
     state: TileState;
     value: number;
+    causesError: boolean; // Does the tile cause an error?
+    inError: boolean; // Is the tile in a row/column/box with an error? (the difference is that causesError refers to the digits that actually repeat, while inError is the surrounding digits)
 }
 
 export const SolveTile = ({
@@ -23,5 +25,7 @@ export const SolveTile = ({
     hasStartValue?: boolean;
 }): SolveTile => ({
     value: startValue,
-    state: hasStartValue ? TileState.SET : TileState.EMPTY
+    state: hasStartValue ? TileState.SET : TileState.EMPTY,
+    causesError: false,
+    inError: false
 });
