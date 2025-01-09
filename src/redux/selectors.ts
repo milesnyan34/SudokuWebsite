@@ -44,3 +44,39 @@ export const selectIsTileEmpty = (row: number, column: number) =>
         [selectSolveTile(row, column)],
         (solveTile) => solveTile.state === TileState.EMPTY
     );
+
+
+/**
+ * Gets the create tile at the given row + column
+ * @param row
+ * @param column
+ * @returns
+ */
+export const selectCreateTile =
+    (row: number, column: number) =>
+    (state: RootState): SolveTile =>
+        state.createSudoku.grid[row][column];
+
+/**
+ * Is the tile at the given position set?
+ * @param row
+ * @param column
+ * @returns
+ */
+export const selectIsCreateTileSet = (row: number, column: number) =>
+    createSelector(
+        [selectCreateTile(row, column)],
+        (solveTile) => solveTile.state === TileState.SET
+    );
+
+/**
+ * Is the tile at the given position empty?
+ * @param row
+ * @param column
+ * @returns
+ */
+export const selectIsCreateTileEmpty = (row: number, column: number) =>
+    createSelector(
+        [selectCreateTile(row, column)],
+        (solveTile) => solveTile.state === TileState.EMPTY
+    );

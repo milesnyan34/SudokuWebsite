@@ -1,4 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
+import createSudokuReducer from "./create/createSudokuSlice";
 import mainReducer from "./main/mainSlice";
 import solveReducer from "./solve/solveSlice";
 
@@ -6,7 +7,8 @@ export const createStore = () =>
     configureStore({
         reducer: {
             main: mainReducer,
-            solve: solveReducer
+            solve: solveReducer,
+            createSudoku: createSudokuReducer
         }
     });
 

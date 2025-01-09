@@ -2,12 +2,12 @@ import classNames from "classnames";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useDetectClickOutside } from "../../../hooks/useDetectClickOutside";
+import { removeValue, updateValue } from "../../../redux/create/createSudokuSlice";
 import {
-    selectIsTileEmpty,
-    selectIsTileSet,
-    selectSolveTile
+    selectCreateTile,
+    selectIsCreateTileEmpty,
+    selectIsCreateTileSet
 } from "../../../redux/selectors";
-import { removeValue, updateValue } from "../../../redux/solve/solveSlice";
 
 /**
  * Tile for the solve page
@@ -17,11 +17,11 @@ import { removeValue, updateValue } from "../../../redux/solve/solveSlice";
  * @param param0
  * @returns
  */
-export const SolveTileComponent = ({ row, column }: { row: number; column: number }) => {
-    const solveData = useSelector(selectSolveTile(row, column));
+export const CreateTileComponent = ({ row, column }: { row: number; column: number }) => {
+    const solveData = useSelector(selectCreateTile(row, column));
     const value = solveData.value;
-    const isSet = useSelector(selectIsTileSet(row, column));
-    const isEmpty = useSelector(selectIsTileEmpty(row, column));
+    const isSet = useSelector(selectIsCreateTileSet(row, column));
+    const isEmpty = useSelector(selectIsCreateTileEmpty(row, column));
     const causesError = solveData.causesError;
     const inError = solveData.inError;
     const isCorrect = solveData.isCorrect;
@@ -93,7 +93,7 @@ export const SolveTileComponent = ({ row, column }: { row: number; column: numbe
             className={classNames(
                 "solve-tile",
                 "flex-center",
-                isSet ? "solve-tile-set" : "solve-tile-unset", // Set/unset tiles
+                "solve-tile-set",
                 active && "solve-tile-active", // The active tile
                 causesError
                     ? "solve-tile-error-source"
