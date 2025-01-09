@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { SolveTile, TileState } from "./SolveTile";
-import { Grid, GRID_SIZE } from "../../utils";
+import { BOX_SIZE, Grid, GRID_SIZE, range } from "../../utils";
 
 type SolveState = {
     // The grid is 9x9
@@ -52,6 +52,99 @@ export const createEmptyGrid = (): Grid<SolveTile> =>
         [0, 0, 0, 0, 0, 0, 0, 0, 0]
     ]);
 
+/**
+ * Detects any errors in a grid, returning the resulting grid
+ * @param grid
+ */
+export const detectErrors = (grid: Grid<SolveTile>): Grid<SolveTile> => {
+    // Make a grid that tracks changes to make (0 is no change, 1 is in error, 2 is error source)
+    const changes: Grid<number> = [];
+
+    for (let i = 0; i < GRID_SIZE; i++) {
+        changes.push(new Array(GRID_SIZE).fill(0));
+    }
+
+    // Helper function that takes a list of coordinates and modifies the changes array
+    const detectErrorsHelper = (
+        coords: Array<{
+            row: number;
+            column: number;
+        }>
+    ) => {
+        // Values that produced errors
+        const errorValues: Array<number> = [];
+
+        // Track found values
+        const found = new Set();
+
+        coords.forEach((coord) => {
+            const { row, column } = coord;
+            const value = grid[row][column].value;
+
+            if (value === 0) {
+                return;
+            }
+
+            if (found.has(value)) {
+                errorValues.push(value);
+            } else {
+                found.add(value);
+            }
+        });
+
+        // Found an error, add all values in the row
+        if (errorValues.length > 0) {
+            coords.forEach((coord) => {
+                const { row, column } = coord;
+
+                changes[row][column] = errorValues.includes(grid[row][column].value)
+                    ? 2
+                    : 1;
+            });
+        }
+    };
+
+    // Look for rows
+    for (let row = 0; row < GRID_SIZE; row++) {
+        detectErrorsHelper(
+            range(0, GRID_SIZE - 1).map((column) => ({
+                row,
+                column
+            }))
+        );
+    }
+
+    // Look for columns
+    for (let column = 0; column < GRID_SIZE; column++) {
+        detectErrorsHelper(
+            range(0, GRID_SIZE - 1).map((row) => ({
+                row,
+                column
+            }))
+        );
+    }
+
+    // Look for boxes
+    for (let boxRow = 0; boxRow < BOX_SIZE; boxRow++) {
+        for (let boxCol = 0; boxCol < BOX_SIZE; boxCol++) {
+            detectErrorsHelper(
+                range(0, GRID_SIZE - 1).map((index) => ({
+                    row: boxRow * BOX_SIZE + Math.floor(index / 3),
+                    column: boxCol * BOX_SIZE + (index % 3)
+                }))
+            );
+        }
+    }
+
+    return grid.map((row, rowIndex) =>
+        row.map((col, colIndex) => ({
+            ...col,
+            inError: changes[rowIndex][colIndex] > 0,
+            causesError: changes[rowIndex][colIndex] === 2
+        }))
+    );
+};
+
 // Creates the initial state for the sudoku
 export const createInitialState = (): SolveState => ({
     grid: createEmptyGrid()
@@ -95,6 +188,8 @@ export const solveSlice = createSlice({
                 value,
                 state: TileState.FILLED
             };
+
+            state.grid = detectErrors(state.grid);
         },
 
         /**
@@ -116,6 +211,8 @@ export const solveSlice = createSlice({
                 value: 0,
                 state: TileState.EMPTY
             };
+
+            state.grid = detectErrors(state.grid);
         },
 
         /**
@@ -125,6 +222,8 @@ export const solveSlice = createSlice({
          */
         setGrid(state: SolveState, action: PayloadAction<Grid<SolveTile>>) {
             state.grid = action.payload;
+
+            state.grid = detectErrors(state.grid);
         },
 
         /**
@@ -141,6 +240,8 @@ export const solveSlice = createSlice({
             }>
         ) {
             state.grid[action.payload.row][action.payload.column] = action.payload.tile;
+
+            state.grid = detectErrors(state.grid);
         }
     }
 });

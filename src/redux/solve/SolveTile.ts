@@ -12,7 +12,7 @@ export enum TileState {
  */
 export type SolveTile = {
     state: TileState;
-    value: number;
+    value: number; // 0 is empty
     causesError: boolean; // Does the tile cause an error?
     inError: boolean; // Is the tile in a row/column/box with an error? (the difference is that causesError refers to the digits that actually repeat, while inError is the surrounding digits)
 }
