@@ -57,11 +57,21 @@ export const createEmptyGrid = (): Grid<SolveTile> =>
  * @param grid
  */
 export const detectErrors = (grid: Grid<SolveTile>): Grid<SolveTile> => {
-    // Make a grid that tracks changes to make (0 is no change, 1 is in error, 2 is error source)
-    const changes: Grid<number> = [];
+    // Make a grid that tracks changes to make
+    const changes: Grid<{
+        causesError: boolean;
+        inError: boolean;
+        isCorrect: boolean;
+    }> = [];
 
     for (let i = 0; i < GRID_SIZE; i++) {
-        changes.push(new Array(GRID_SIZE).fill(0));
+        changes.push(
+            new Array(GRID_SIZE).fill(0).map((_) => ({
+                causesError: false,
+                inError: false,
+                isCorrect: false
+            }))
+        );
     }
 
     // Helper function that takes a list of coordinates and modifies the changes array
@@ -97,51 +107,90 @@ export const detectErrors = (grid: Grid<SolveTile>): Grid<SolveTile> => {
             coords.forEach((coord) => {
                 const { row, column } = coord;
 
-                changes[row][column] = errorValues.includes(grid[row][column].value)
-                    ? 2
-                    : 1;
+                changes[row][column] = Object.assign(changes[row][column], {
+                    inError: true,
+                    causesError: errorValues.includes(grid[row][column].value)
+                });
             });
         }
     };
 
-    // Look for rows
-    for (let row = 0; row < GRID_SIZE; row++) {
-        detectErrorsHelper(
-            range(0, GRID_SIZE - 1).map((column) => ({
-                row,
-                column
-            }))
-        );
-    }
+    // Variant for completed rows
+    const detectCompletedHelper = (
+        coords: Array<{
+            row: number;
+            column: number;
+        }>
+    ) => {
+        // Number of tiles with errors
+        let errorCount = 0;
 
-    // Look for columns
-    for (let column = 0; column < GRID_SIZE; column++) {
-        detectErrorsHelper(
-            range(0, GRID_SIZE - 1).map((row) => ({
-                row,
-                column
-            }))
-        );
-    }
+        // Track found values
+        const found = new Set();
 
-    // Look for boxes
-    for (let boxRow = 0; boxRow < BOX_SIZE; boxRow++) {
-        for (let boxCol = 0; boxCol < BOX_SIZE; boxCol++) {
-            detectErrorsHelper(
-                range(0, GRID_SIZE - 1).map((index) => ({
-                    row: boxRow * BOX_SIZE + Math.floor(index / 3),
-                    column: boxCol * BOX_SIZE + (index % 3)
+        coords.forEach((coord) => {
+            const { row, column } = coord;
+            const value = grid[row][column].value;
+
+            if (value === 0) {
+                return;
+            }
+
+            if (changes[row][column].inError) {
+                errorCount++;
+            }
+
+            found.add(value);
+        });
+
+        // Row is completed
+        if (found.size == GRID_SIZE && errorCount === 0) {
+            coords.forEach((coord) => {
+                const { row, column } = coord;
+
+                changes[row][column] = Object.assign(changes[row][column], {
+                    isCorrect: true
+                });
+            });
+        }
+    };
+
+    for (const fn of [detectErrorsHelper, detectCompletedHelper]) {
+        // Look for rows
+        for (let row = 0; row < GRID_SIZE; row++) {
+            fn(
+                range(0, GRID_SIZE - 1).map((column) => ({
+                    row,
+                    column
                 }))
             );
+        }
+
+        // Look for columns
+        for (let column = 0; column < GRID_SIZE; column++) {
+            fn(
+                range(0, GRID_SIZE - 1).map((row) => ({
+                    row,
+                    column
+                }))
+            );
+        }
+
+        // Look for boxes
+        for (let boxRow = 0; boxRow < BOX_SIZE; boxRow++) {
+            for (let boxCol = 0; boxCol < BOX_SIZE; boxCol++) {
+                fn(
+                    range(0, GRID_SIZE - 1).map((index) => ({
+                        row: boxRow * BOX_SIZE + Math.floor(index / 3),
+                        column: boxCol * BOX_SIZE + (index % 3)
+                    }))
+                );
+            }
         }
     }
 
     return grid.map((row, rowIndex) =>
-        row.map((col, colIndex) => ({
-            ...col,
-            inError: changes[rowIndex][colIndex] > 0,
-            causesError: changes[rowIndex][colIndex] === 2
-        }))
+        row.map((col, colIndex) => Object.assign(col, changes[rowIndex][colIndex]))
     );
 };
 

@@ -24,6 +24,7 @@ export const SolveTileComponent = ({ row, column }: { row: number; column: numbe
     const isEmpty = useSelector(selectIsTileEmpty(row, column));
     const causesError = solveData.causesError;
     const inError = solveData.inError;
+    const isCorrect = solveData.isCorrect;
 
     const dispatch = useDispatch();
 
@@ -94,7 +95,7 @@ export const SolveTileComponent = ({ row, column }: { row: number; column: numbe
                 "flex-center",
                 isSet ? "solve-tile-set" : "solve-tile-unset", // Set/unset tiles
                 active && "solve-tile-active", // The active tile
-                causesError ? "solve-tile-error-source" : inError ? "solve-tile-error" : "" // Error tiles
+                causesError ? "solve-tile-error-source" : isCorrect ? "solve-tile-correct" : inError ? "solve-tile-error" : "" // Error tiles
             )}
             onClick={onClicked}
             data-testid={`solve-tile-${row}-${column}`}

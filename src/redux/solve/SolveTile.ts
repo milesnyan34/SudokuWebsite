@@ -15,6 +15,7 @@ export type SolveTile = {
     value: number; // 0 is empty
     causesError: boolean; // Does the tile cause an error?
     inError: boolean; // Is the tile in a row/column/box with an error? (the difference is that causesError refers to the digits that actually repeat, while inError is the surrounding digits)
+    isCorrect: boolean; // Is the tile in a finished row/column/box without any errors?
 }
 
 export const SolveTile = ({
@@ -27,5 +28,6 @@ export const SolveTile = ({
     value: startValue,
     state: hasStartValue ? TileState.SET : TileState.EMPTY,
     causesError: false,
-    inError: false
+    inError: false,
+    isCorrect: false
 });
