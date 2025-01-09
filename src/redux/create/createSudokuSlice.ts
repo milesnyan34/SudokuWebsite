@@ -1,16 +1,126 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Grid } from "../../utils";
+import { BOX_SIZE, Grid, GRID_SIZE } from "../../utils";
 import { createEmptyGrid, detectErrors } from "../solve/solveSlice";
 import { SolveTile, TileState } from "../solve/SolveTile";
+
+// Solution text type
+export type SolutionType = "multiple" | "none" | "valid";
 
 type CreateState = {
     // The grid is 9x9 (we can re-use the SolveTile class)
     grid: Grid<SolveTile>;
+    solution: SolutionType;
+};
+
+// Find what solutions are possible
+export const findSolution = (grid: Grid<SolveTile>): SolutionType => {
+    // Start by searching for tiles with errors
+    for (const row of grid) {
+        for (const col of row) {
+            if (col.inError) {
+                return "none";
+            }
+        }
+    }
+
+    // Now make a simpler version of the grid
+    const simpleGrid = grid.map((row) =>
+        row.map((col) => (col.value === 0 ? null : col.value))
+    );
+
+    // Helper function for solving sudoku, returns the number of solutions, if it is greater than 1 then it just returns 2
+    const sudokuHelper = (
+        grid2: Grid<number | null>,
+        row: number,
+        column: number
+    ): number => {
+        let solutions = 0;
+
+        const nextRow = column === GRID_SIZE - 1 ? row + 1 : row;
+        const nextCol = (column + 1) % GRID_SIZE;
+
+        if (row >= GRID_SIZE) {
+            return 1; // Base case
+        } else if (grid[row][column].state === TileState.FILLED) {
+            // Skip to next tile
+            solutions += sudokuHelper(grid2, nextRow, nextCol);
+        } else {
+            // Try each possibility
+            for (let i = 1; i <= 9; i++) {
+                let canPlace = true;
+
+                // Check the column
+                for (let row2 = 0; row2 < GRID_SIZE; row2++) {
+                    if (grid2[row2][column] === i) {
+                        canPlace = false;
+                        break;
+                    }
+                }
+
+                if (canPlace) {
+                    // Check the row
+                    for (let col2 = 0; col2 < GRID_SIZE; col2++) {
+                        if (grid2[row][col2] === i) {
+                            canPlace = false;
+                            break;
+                        }
+                    }
+                }
+
+                if (canPlace) {
+                    // Check the box
+                    const boxRow = Math.floor(row / 3);
+                    const boxCol = Math.floor(column / 3);
+
+                    for (
+                        let row2 = boxRow * BOX_SIZE;
+                        row2 < (boxRow + 1) * BOX_SIZE;
+                        row2++
+                    ) {
+                        for (
+                            let col2 = boxCol * BOX_SIZE;
+                            col2 < (boxCol + 1) * BOX_SIZE;
+                            col2++
+                        ) {
+                            if (grid2[row2][col2] === i) {
+                                canPlace = false;
+                                break;
+                            }
+                        }
+
+                        if (!canPlace) {
+                            break;
+                        }
+                    }
+                }
+
+                // Place it if possible
+                if (canPlace) {
+                    grid2[row][column] = i;
+
+                    solutions += sudokuHelper(grid2, nextRow, nextCol);
+
+                    if (solutions >= 2) {
+                        return 2;
+                    }
+
+                    grid2[row][column] = null;
+                }
+            }
+        }
+
+        return solutions;
+    };
+
+    const result = sudokuHelper(simpleGrid, 0, 0);
+
+    return result === 0 ? "none" : result === 1 ? "valid" : "multiple";
 };
 
 // Creates the initial state for the sudoku
 export const createInitialState = (): CreateState => ({
-    grid: createEmptyGrid()
+    grid: createEmptyGrid(),
+    solution: "multiple"
 });
 
 const initialState = createInitialState();
@@ -54,6 +164,7 @@ export const createSudokuSlice = createSlice({
             };
 
             state.grid = detectErrors(state.grid);
+            state.solution = findSolution(state.grid);
         },
 
         /**
@@ -77,6 +188,7 @@ export const createSudokuSlice = createSlice({
             };
 
             state.grid = detectErrors(state.grid);
+            state.solution = findSolution(state.grid);
         },
 
         /**
@@ -88,6 +200,7 @@ export const createSudokuSlice = createSlice({
             state.grid = action.payload;
 
             state.grid = detectErrors(state.grid);
+            state.solution = findSolution(state.grid);
         },
 
         /**
@@ -106,6 +219,7 @@ export const createSudokuSlice = createSlice({
             state.grid[action.payload.row][action.payload.column] = action.payload.tile;
 
             state.grid = detectErrors(state.grid);
+            state.solution = findSolution(state.grid);
         }
     }
 });

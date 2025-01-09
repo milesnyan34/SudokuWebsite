@@ -86,3 +86,16 @@
 .solve-tile-correct:hover {
     background-color: rgb(139, 248, 144);
 }
+
+.solution-text {
+    margin-bottom: 20px;
+    font-size: 20px;
+}
+
+.solution-text-valid {
+    color: lime;
+}
+
+.solution-text-invalid {
+    color: rgb(175, 0, 0);
+}

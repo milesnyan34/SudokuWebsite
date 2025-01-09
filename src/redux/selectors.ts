@@ -1,4 +1,5 @@
 import { createSelector } from "@reduxjs/toolkit";
+import { SolutionType } from "./create/createSudokuSlice";
 import { AppPage } from "./main/mainSlice";
 import { SolveTile, TileState } from "./solve/SolveTile";
 import { RootState } from "./store";
@@ -45,7 +46,6 @@ export const selectIsTileEmpty = (row: number, column: number) =>
         (solveTile) => solveTile.state === TileState.EMPTY
     );
 
-
 /**
  * Gets the create tile at the given row + column
  * @param row
@@ -80,3 +80,9 @@ export const selectIsCreateTileEmpty = (row: number, column: number) =>
         [selectCreateTile(row, column)],
         (solveTile) => solveTile.state === TileState.EMPTY
     );
+
+/**
+ * Returns the solution of the sudoku
+ */
+export const selectSolution = (state: RootState): SolutionType =>
+    state.createSudoku.solution;
