@@ -29,11 +29,56 @@ export const findSolution = (grid: Grid<SolveTile>): SolutionType => {
     );
 
     // For each tile, determine the list of possible numbers that can be placed in it
-    // Check this with grid[row][column][number]
     // This helps optimize the program by making it so it doesn't have to repeatedly check impossible values
-    const possibilities: Grid<Array<boolean>> = grid.map((row) => row.map(() => []));
+    const possibilities: Array<{
+        row: number;
+        column: number;
+        options: Array<number>;
+    }> = [];
 
-    console.log(possibilities)
+    for (let row = 0; row < GRID_SIZE; row++) {
+        for (let column = 0; column < GRID_SIZE; column++) {
+            const valid = new Set([1, 2, 3, 4, 5, 6, 7, 8, 9]);
+
+            // Try the column
+            for (let row2 = 0; row2 < GRID_SIZE; row2++) {
+                valid.delete(grid[row2][column].value);
+            }
+
+            // Try the row
+            for (let col2 = 0; col2 < GRID_SIZE; col2++) {
+                valid.delete(grid[row][col2].value);
+            }
+
+            // Try the box
+            const boxRow = Math.floor(row / 3);
+            const boxCol = Math.floor(column / 3);
+
+            for (let row2 = boxRow * BOX_SIZE; row2 < (boxRow + 1) * BOX_SIZE; row2++) {
+                for (
+                    let col2 = boxCol * BOX_SIZE;
+                    col2 < (boxCol + 1) * BOX_SIZE;
+                    col2++
+                ) {
+                    valid.delete(grid[row2][col2].value);
+                }
+            }
+
+            // Now set the possibilities
+            possibilities.push({
+                row,
+                column,
+                options: Array.from(valid)
+            });
+        }
+    }
+
+    // console.log(possibilities);
+
+    // Get the sorted list of row/columns based on the number of options
+    possibilities.sort((a, b) => a.options.length - b.options.length);
+
+    console.log(possibilities);
 
     // Helper function for solving sudoku, returns the number of solutions, if it is greater than 1 then it just returns 2
     const sudokuHelper = (
@@ -53,7 +98,7 @@ export const findSolution = (grid: Grid<SolveTile>): SolutionType => {
             solutions += sudokuHelper(grid2, nextRow, nextCol);
         } else {
             // Try each possibility
-            for (let i = 1; i <= 9; i++) {
+            for (let i = 0; i < GRID_SIZE; i++) {
                 let canPlace = true;
 
                 // Check the column
