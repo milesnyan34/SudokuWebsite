@@ -109,3 +109,13 @@
     padding: 10px;
     font-size: 22px;
 }
+
+#export-sudoku:hover {
+    background-color: rgb(141, 141, 141);
+    cursor: pointer;
+}
+
+#export-sudoku:active {
+    background-color: rgb(151, 151, 151);
+    cursor: pointer;
+}
