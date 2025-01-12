@@ -28,6 +28,13 @@ export const findSolution = (grid: Grid<SolveTile>): SolutionType => {
         row.map((col) => (col.value === 0 ? null : col.value))
     );
 
+    // For each tile, determine the list of possible numbers that can be placed in it
+    // Check this with grid[row][column][number]
+    // This helps optimize the program by making it so it doesn't have to repeatedly check impossible values
+    const possibilities: Grid<Array<boolean>> = grid.map((row) => row.map(() => []));
+
+    console.log(possibilities)
+
     // Helper function for solving sudoku, returns the number of solutions, if it is greater than 1 then it just returns 2
     const sudokuHelper = (
         grid2: Grid<number | null>,

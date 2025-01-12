@@ -99,3 +99,13 @@
 .solution-text-invalid {
     color: rgb(175, 0, 0);
 }
+
+#export-sudoku {
+    margin-top: 20px;
+
+    background-color: rgb(110, 110, 110);
+    border: 0px;
+    border-radius: 15px;
+    padding: 10px;
+    font-size: 22px;
+}

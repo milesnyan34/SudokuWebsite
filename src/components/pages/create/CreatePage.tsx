@@ -38,6 +38,10 @@ const CreatePage = () => {
                     </div>
                 ))}
             </div>
+
+            <button type="button" id="export-sudoku">
+                Export Sudoku
+            </button>
         </div>
     );
 };
