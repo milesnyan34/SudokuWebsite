@@ -1,10 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { BOX_SIZE, Grid, GRID_SIZE } from "../../utils";
+import { BOX_SIZE, Grid, GRID_SIZE, TILES_THRESHOLD } from "../../utils";
 import { createEmptyGrid, detectErrors } from "../solve/solveSlice";
 import { SolveTile, TileState } from "../solve/SolveTile";
 
 // Solution text type
-export type SolutionType = "multiple" | "none" | "valid";
+export type SolutionType = "multiple" | "none" | "valid" | "not enough tiles";
 
 type CreateState = {
     // The grid is 9x9 (we can re-use the SolveTile class)
@@ -15,12 +15,20 @@ type CreateState = {
 // Find what solutions are possible
 export const findSolution = (grid: Grid<SolveTile>): SolutionType => {
     // Start by searching for tiles with errors
+    let filledCount = 0;
+
     for (const row of grid) {
         for (const col of row) {
             if (col.inError) {
                 return "none";
+            } else if (col.state === TileState.FILLED) {
+                filledCount++;
             }
         }
+    }
+
+    if (filledCount < TILES_THRESHOLD) {
+        return "not enough tiles";
     }
 
     // Now make a simpler version of the grid
@@ -38,17 +46,52 @@ export const findSolution = (grid: Grid<SolveTile>): SolutionType => {
 
     for (let row = 0; row < GRID_SIZE; row++) {
         for (let column = 0; column < GRID_SIZE; column++) {
-            const valid = new Set([1, 2, 3, 4, 5, 6, 7, 8, 9]);
+            if (simpleGrid[row][column] !== null) {
+                possibilities.push({ row, column, options: [] });
+                continue;
+            }
+
+            const valid: Set<number> = new Set([1, 2, 3, 4, 5, 6, 7, 8, 9]);
+
+            let foundValues = new Set();
 
             // Try the column
             for (let row2 = 0; row2 < GRID_SIZE; row2++) {
-                valid.delete(grid[row2][column].value);
+                const value = simpleGrid[row2][column];
+
+                if (value !== null) {
+                    if (foundValues.has(value)) {
+                        // Extra check for errors, if a value was removed twice then there is a new error
+                        console.log("column", foundValues);
+                        return "none";
+                    }
+
+                    foundValues.add(value);
+
+                    valid.delete(simpleGrid[row2][column]!);
+                }
             }
+
+            foundValues = new Set();
 
             // Try the row
             for (let col2 = 0; col2 < GRID_SIZE; col2++) {
-                valid.delete(grid[row][col2].value);
+                const value = simpleGrid[row][col2];
+
+                if (value !== null) {
+                    if (foundValues.has(value)) {
+                        // Extra check for errors, if a value was removed twice then there is a new error
+                        console.log("row", foundValues);
+                        return "none";
+                    }
+
+                    foundValues.add(value);
+
+                    valid.delete(simpleGrid[row][col2]!);
+                }
             }
+
+            foundValues = new Set();
 
             // Try the box
             const boxRow = Math.floor(row / 3);
@@ -60,7 +103,19 @@ export const findSolution = (grid: Grid<SolveTile>): SolutionType => {
                     col2 < (boxCol + 1) * BOX_SIZE;
                     col2++
                 ) {
-                    valid.delete(grid[row2][col2].value);
+                    const value = simpleGrid[row2][col2];
+
+                    if (value !== null) {
+                        if (foundValues.has(value)) {
+                            // Extra check for errors, if a value was removed twice then there is a new error
+                        console.log("box", foundValues);
+                            return "none";
+                        }
+
+                        foundValues.add(value);
+
+                        valid.delete(simpleGrid[row2][col2]!);
+                    }
                 }
             }
 
@@ -73,32 +128,26 @@ export const findSolution = (grid: Grid<SolveTile>): SolutionType => {
         }
     }
 
-    // console.log(possibilities);
-
     // Get the sorted list of row/columns based on the number of options
     possibilities.sort((a, b) => a.options.length - b.options.length);
 
-    console.log(possibilities);
-
     // Helper function for solving sudoku, returns the number of solutions, if it is greater than 1 then it just returns 2
-    const sudokuHelper = (
-        grid2: Grid<number | null>,
-        row: number,
-        column: number
-    ): number => {
+    const sudokuHelper = (grid2: Grid<number | null>, index: number): number => {
         let solutions = 0;
 
-        const nextRow = column === GRID_SIZE - 1 ? row + 1 : row;
-        const nextCol = (column + 1) % GRID_SIZE;
-
-        if (row >= GRID_SIZE) {
+        if (index >= GRID_SIZE * GRID_SIZE) {
             return 1; // Base case
-        } else if (grid[row][column].state === TileState.FILLED) {
+        }
+
+        const possib = possibilities[index];
+        const row = possib.row;
+        const column = possib.column;
+
+        if (grid[row][column].state === TileState.FILLED) {
             // Skip to next tile
-            solutions += sudokuHelper(grid2, nextRow, nextCol);
+            solutions += sudokuHelper(grid2, index + 1);
         } else {
-            // Try each possibility
-            for (let i = 0; i < GRID_SIZE; i++) {
+            for (const i of possib.options) {
                 let canPlace = true;
 
                 // Check the column
@@ -150,7 +199,7 @@ export const findSolution = (grid: Grid<SolveTile>): SolutionType => {
                 if (canPlace) {
                     grid2[row][column] = i;
 
-                    solutions += sudokuHelper(grid2, nextRow, nextCol);
+                    solutions += sudokuHelper(grid2, index + 1);
 
                     if (solutions >= 2) {
                         return 2;
@@ -164,7 +213,7 @@ export const findSolution = (grid: Grid<SolveTile>): SolutionType => {
         return solutions;
     };
 
-    const result = sudokuHelper(simpleGrid, 0, 0);
+    const result = sudokuHelper(simpleGrid, 0);
 
     return result === 0 ? "none" : result === 1 ? "valid" : "multiple";
 };
@@ -172,7 +221,7 @@ export const findSolution = (grid: Grid<SolveTile>): SolutionType => {
 // Creates the initial state for the sudoku
 export const createInitialState = (): CreateState => ({
     grid: createEmptyGrid(),
-    solution: "multiple"
+    solution: "not enough tiles"
 });
 
 const initialState = createInitialState();

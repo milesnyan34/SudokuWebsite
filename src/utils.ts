@@ -9,6 +9,11 @@ export const GRID_SIZE = 9;
 export const BOX_SIZE = 3;
 
 /**
+ * Number of filled tiles needed to determine solvability
+ */
+export const TILES_THRESHOLD = 16;
+
+/**
  * Represents a 2D grid of values
  */
 export type Grid<T> = Array<Array<T>>;
