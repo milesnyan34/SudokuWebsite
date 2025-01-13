@@ -53,8 +53,6 @@ export const findSolution = (grid: Grid<SolveTile>): SolutionType => {
 
             const valid: Set<number> = new Set([1, 2, 3, 4, 5, 6, 7, 8, 9]);
 
-            let foundValues = new Set();
-
             // Try the column
             for (let row2 = 0; row2 < GRID_SIZE; row2++) {
                 const value = simpleGrid[row2][column];
@@ -64,8 +62,6 @@ export const findSolution = (grid: Grid<SolveTile>): SolutionType => {
                 }
             }
 
-            foundValues = new Set();
-
             // Try the row
             for (let col2 = 0; col2 < GRID_SIZE; col2++) {
                 const value = simpleGrid[row][col2];
@@ -74,8 +70,6 @@ export const findSolution = (grid: Grid<SolveTile>): SolutionType => {
                     valid.delete(simpleGrid[row][col2]!);
                 }
             }
-
-            foundValues = new Set();
 
             // Try the box
             const boxRow = Math.floor(row / 3);

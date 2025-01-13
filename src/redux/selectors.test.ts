@@ -1,9 +1,9 @@
-import { selectStringFormat } from "../selectors";
-import { createSudokuGrid } from "../solve/solveSlice";
-import { createStore } from "../store";
-import { setGrid } from "./createSudokuSlice";
+import { setGrid } from "./create/createSudokuSlice";
+import { selectStringFormat } from "./selectors";
+import { createSudokuGrid } from "./solve/solveSlice";
+import { createStore } from "./store";
 
-describe("solveSlice", () => {
+describe("selectors", () => {
     test("selectStringFormat", () => {
         const store = createStore();
 
