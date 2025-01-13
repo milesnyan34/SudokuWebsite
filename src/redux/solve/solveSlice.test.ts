@@ -1,4 +1,8 @@
-import reducer, { createInitialState, removeValue, updateValue } from "./solveSlice";
+import reducer, {
+    createInitialState,
+    removeValue,
+    updateValue
+} from "./solveSlice";
 import { TileState } from "./SolveTile";
 
 describe("solveSlice", () => {

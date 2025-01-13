@@ -10,6 +10,7 @@ import { CreateTileComponent } from "./CreateTileComponent";
  */
 const CreatePage = () => {
     const solution = useSelector(selectSolution);
+
     const solutionText =
         solution === "multiple"
             ? "Too many solutions found!"
@@ -18,6 +19,11 @@ const CreatePage = () => {
             : solution === "not enough tiles"
             ? `Not enough filled tiles! (needs at least ${TILES_THRESHOLD})`
             : "Unique solution found!";
+
+    // Runs when the export button is clicked
+    const onExportClicked = () => {
+        
+    }
 
     // The 9x9 grid is basically a 3x3 grid of 3x3 boxes
     return (
@@ -53,7 +59,7 @@ const CreatePage = () => {
                 ))}
             </div>
 
-            <button type="button" id="export-sudoku">
+            <button type="button" id="export-sudoku" onClick={onExportClicked}>
                 Export Sudoku
             </button>
         </div>

@@ -86,3 +86,11 @@ export const selectIsCreateTileEmpty = (row: number, column: number) =>
  */
 export const selectSolution = (state: RootState): SolutionType =>
     state.createSudoku.solution;
+
+/**
+ * Returns the string representation of the sudoku
+ */
+export const selectStringFormat = (state: RootState): string =>
+    state.createSudoku.grid
+        .map((row) => row.map((col) => col.value.toString()).join(","))
+        .join("\n");

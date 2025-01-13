@@ -60,14 +60,6 @@ export const findSolution = (grid: Grid<SolveTile>): SolutionType => {
                 const value = simpleGrid[row2][column];
 
                 if (value !== null) {
-                    if (foundValues.has(value)) {
-                        // Extra check for errors, if a value was removed twice then there is a new error
-                        console.log("column", foundValues);
-                        return "none";
-                    }
-
-                    foundValues.add(value);
-
                     valid.delete(simpleGrid[row2][column]!);
                 }
             }
@@ -79,14 +71,6 @@ export const findSolution = (grid: Grid<SolveTile>): SolutionType => {
                 const value = simpleGrid[row][col2];
 
                 if (value !== null) {
-                    if (foundValues.has(value)) {
-                        // Extra check for errors, if a value was removed twice then there is a new error
-                        console.log("row", foundValues);
-                        return "none";
-                    }
-
-                    foundValues.add(value);
-
                     valid.delete(simpleGrid[row][col2]!);
                 }
             }
@@ -106,14 +90,6 @@ export const findSolution = (grid: Grid<SolveTile>): SolutionType => {
                     const value = simpleGrid[row2][col2];
 
                     if (value !== null) {
-                        if (foundValues.has(value)) {
-                            // Extra check for errors, if a value was removed twice then there is a new error
-                        console.log("box", foundValues);
-                            return "none";
-                        }
-
-                        foundValues.add(value);
-
                         valid.delete(simpleGrid[row2][col2]!);
                     }
                 }
