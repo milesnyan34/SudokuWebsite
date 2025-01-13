@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import { useSelector } from "react-redux";
-import { selectSolution } from "../../../redux/selectors";
+import { selectSolution, selectStringFormat } from "../../../redux/selectors";
 import { BOX_SIZE, range, TILES_THRESHOLD } from "../../../utils";
 import { CreateTileComponent } from "./CreateTileComponent";
 
@@ -20,10 +20,23 @@ const CreatePage = () => {
             ? `Not enough filled tiles! (needs at least ${TILES_THRESHOLD})`
             : "Unique solution found!";
 
+    const sudokuStringFormat = useSelector(selectStringFormat);
+
     // Runs when the export button is clicked
     const onExportClicked = () => {
-        
-    }
+        // Download the file
+        const link = document.createElement("a");
+
+        link.setAttribute("download", "");
+        link.href = window.URL.createObjectURL(
+            new Blob([sudokuStringFormat], {
+                type: "text/plain"
+            })
+        );
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+    };
 
     // The 9x9 grid is basically a 3x3 grid of 3x3 boxes
     return (
