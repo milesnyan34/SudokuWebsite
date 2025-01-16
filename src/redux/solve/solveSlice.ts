@@ -5,6 +5,9 @@ import { BOX_SIZE, Grid, GRID_SIZE, range } from "../../utils";
 type SolveState = {
     // The grid is 9x9
     grid: Grid<SolveTile>;
+
+    // Is there an import error?
+    importError: boolean;
 };
 
 // Creates an empty grid
@@ -197,26 +200,14 @@ export const detectErrors = (grid: Grid<SolveTile>): Grid<SolveTile> => {
 
 // Creates the initial state for the sudoku
 export const createInitialState = (): SolveState => ({
-    grid: createEmptyGrid()
+    grid: createEmptyGrid(),
+    importError: false
 });
 
 const initialState = createInitialState();
 
 export const solveSlice = createSlice({
     name: "solve",
-    // initialState: Object.assign(initialState, {
-    //     grid: createSudokuGrid([
-    //         [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    //         [0, 1, 5, 0, 0, 0, 0, 0, 0],
-    //         [0, 0, 0, 0, 3, 0, 0, 0, 0],
-    //         [0, 0, 0, 0, 0, 7, 0, 0, 0],
-    //         [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    //         [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    //         [0, 0, 0, 0, 0, 0, 0, 2, 0],
-    //         [0, 0, 0, 0, 0, 0, 8, 0, 0],
-    //         [0, 0, 0, 0, 0, 0, 0, 0, 0]
-    //     ])
-    // }),
     initialState,
     reducers: {
         /**
@@ -241,6 +232,7 @@ export const solveSlice = createSlice({
             };
 
             state.grid = detectErrors(state.grid);
+            state.importError = false;
         },
 
         /**
@@ -264,6 +256,7 @@ export const solveSlice = createSlice({
             };
 
             state.grid = detectErrors(state.grid);
+            state.importError = false;
         },
 
         /**
@@ -293,10 +286,57 @@ export const solveSlice = createSlice({
             state.grid[action.payload.row][action.payload.column] = action.payload.tile;
 
             state.grid = detectErrors(state.grid);
+        },
+
+        /**
+         * Sets the grid based on the format string sent in
+         */
+        setGridFromFormat(state: SolveState, action: PayloadAction<string>) {
+            const formatString = action.payload;
+            const lines = formatString.split("\n");
+
+            // Check number of rows
+            if (lines.length !== GRID_SIZE) {
+                state.importError = true;
+                return;
+            } else {
+                let success = true;
+                const newGrid: Grid<number> = [];
+
+                for (const line of lines) {
+                    const split = line.split(",");
+                    const row: number[] = [];
+
+                    // Check number of columns
+                    if (split.length !== GRID_SIZE) {
+                        success = false;
+                    } else {
+                        for (const col of split) {
+                            const parsed = parseInt(col);
+
+                            if (isNaN(parsed) || parsed < 0 || parsed > GRID_SIZE) {
+                                success = false;
+                                break;
+                            } else {
+                                row.push(parsed);
+                            }
+                        }
+
+                        newGrid.push(row);
+                    }
+                }
+
+                if (success) {
+                    state.grid = createSudokuGrid(newGrid);
+                    state.importError = false;
+                } else {
+                    state.importError = true;
+                }
+            }
         }
     }
 });
 
-export const { removeValue, setGrid, setGridAt, updateValue } = solveSlice.actions;
+export const { removeValue, setGrid, setGridAt, setGridFromFormat, updateValue } = solveSlice.actions;
 
 export default solveSlice.reducer;

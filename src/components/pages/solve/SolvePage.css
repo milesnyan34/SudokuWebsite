@@ -100,8 +100,9 @@
     color: rgb(175, 0, 0);
 }
 
-#export-sudoku {
-    margin-top: 20px;
+#export-sudoku,
+#import-sudoku {
+    margin: 20px;
 
     background-color: rgb(110, 110, 110);
     border: 0px;
@@ -110,12 +111,40 @@
     font-size: 22px;
 }
 
-#export-sudoku:hover {
+#export-sudoku:hover,
+#import-sudoku:hover {
     background-color: rgb(141, 141, 141);
     cursor: pointer;
 }
 
-#export-sudoku:active {
+#export-sudoku:active,
+#import-sudoku:active {
     background-color: rgb(151, 151, 151);
     cursor: pointer;
+}
+
+.import-sudoku-row {
+    display: grid;
+    grid-template-rows: 100%;
+    grid-template-columns: 43% 14% 43%;
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+#import-sudoku-container {
+    grid-column: 2;
+}
+
+#import-sudoku {
+    margin: 0;
+}
+
+#import-sudoku-error-text {
+    font-size: 20px;
+    color: rgb(175, 0, 0);
+    margin: 0;
+    grid-column: 3;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }

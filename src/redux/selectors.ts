@@ -94,3 +94,5 @@ export const selectStringFormat = (state: RootState): string =>
     state.createSudoku.grid
         .map((row) => row.map((col) => col.value.toString()).join(","))
         .join("\n");
+
+export const selectImportError = (state: RootState): boolean => state.solve.importError;
