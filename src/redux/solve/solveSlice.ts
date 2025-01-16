@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { BOX_SIZE, Grid, GRID_SIZE, range } from "../../utils";
-import { SolveTile, TileState } from "./SolveTile";
+import { createHintsList, SolveTile, TileState } from "./SolveTile";
 
 type SolveState = {
     // The grid is 9x9
@@ -232,7 +232,8 @@ export const solveSlice = createSlice({
             state.grid[row][column] = {
                 ...state.grid[row][column],
                 value,
-                state: TileState.FILLED
+                state: TileState.FILLED,
+                hints: createHintsList() // Reset the hints
             };
 
             state.grid = detectErrors(state.grid);

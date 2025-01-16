@@ -19,6 +19,19 @@ export type SolveTile = {
     hints: boolean[]; // List of hints from 1 to 9, true if there is a hint for it
 };
 
+// Creates an empty hints list
+export const createHintsList = () => [
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false
+];
+
 export const SolveTile = ({
     startValue = 0, // Starting value for the tile
     hasStartValue = false // Should it have a starting value?
@@ -31,5 +44,5 @@ export const SolveTile = ({
     causesError: false,
     inError: false,
     isCorrect: false,
-    hints: [false, false, false, false, false, false, false, false, false]
+    hints: createHintsList()
 });
