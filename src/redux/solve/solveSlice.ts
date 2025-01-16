@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { SolveTile, TileState } from "./SolveTile";
 import { BOX_SIZE, Grid, GRID_SIZE, range } from "../../utils";
+import { SolveTile, TileState } from "./SolveTile";
 
 type SolveState = {
     // The grid is 9x9
@@ -8,6 +8,9 @@ type SolveState = {
 
     // Is there an import error?
     importError: boolean;
+
+    // Are hints being created?
+    makeHints: boolean;
 };
 
 // Creates an empty grid
@@ -201,7 +204,8 @@ export const detectErrors = (grid: Grid<SolveTile>): Grid<SolveTile> => {
 // Creates the initial state for the sudoku
 export const createInitialState = (): SolveState => ({
     grid: createEmptyGrid(),
-    importError: false
+    importError: false,
+    makeHints: false
 });
 
 const initialState = createInitialState();
@@ -333,10 +337,21 @@ export const solveSlice = createSlice({
                     state.importError = true;
                 }
             }
+        },
+
+        setMakeHints(state: SolveState, action: PayloadAction<boolean>) {
+            state.makeHints = action.payload;
         }
     }
 });
 
-export const { removeValue, setGrid, setGridAt, setGridFromFormat, updateValue } = solveSlice.actions;
+export const {
+    removeValue,
+    setGrid,
+    setGridAt,
+    setGridFromFormat,
+    setMakeHints,
+    updateValue
+} = solveSlice.actions;
 
 export default solveSlice.reducer;

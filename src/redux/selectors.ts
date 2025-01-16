@@ -96,3 +96,5 @@ export const selectStringFormat = (state: RootState): string =>
         .join("\n");
 
 export const selectImportError = (state: RootState): boolean => state.solve.importError;
+
+export const selectMakeHints = (state: RootState): boolean => state.solve.makeHints;

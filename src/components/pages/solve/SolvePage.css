@@ -148,3 +148,7 @@
     flex-direction: column;
     justify-content: center;
 }
+
+#solve-hint-text {
+    margin-top: 10px;
+}

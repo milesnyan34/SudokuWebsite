@@ -1,6 +1,7 @@
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { selectImportError } from "../../../redux/selectors";
-import { setGridFromFormat } from "../../../redux/solve/solveSlice";
+import { selectImportError, selectMakeHints } from "../../../redux/selectors";
+import { setGridFromFormat, setMakeHints } from "../../../redux/solve/solveSlice";
 import { BOX_SIZE, range } from "../../../utils";
 import "./SolvePage.css";
 import { SolveTileComponent } from "./SolveTileComponent";
@@ -13,6 +14,8 @@ const SolvePage = () => {
     const dispatch = useDispatch();
 
     const importError = useSelector(selectImportError);
+
+    const canMakeHints = useSelector(selectMakeHints);
 
     const onImportClicked = () => {
         const filePicker = document.createElement("input");
@@ -30,6 +33,29 @@ const SolvePage = () => {
 
         filePicker.click();
     };
+
+    // Set up effect for detecting shift
+    useEffect(() => {
+        const onListener = (event: KeyboardEvent) => {
+            if (event.key === "Shift") {
+                dispatch(setMakeHints(true));
+            }
+        };
+
+        const offListener = (event: KeyboardEvent) => {
+            if (event.key === "Shift") {
+                dispatch(setMakeHints(false));
+            }
+        };
+
+        document.addEventListener("keydown", onListener);
+        document.addEventListener("keyup", offListener);
+
+        return () => {
+            document.removeEventListener("keydown", onListener);
+            document.removeEventListener("keyup", offListener);
+        };
+    });
 
     // The 9x9 grid is basically a 3x3 grid of 3x3 boxes
     return (
@@ -66,6 +92,10 @@ const SolvePage = () => {
                         ))}
                     </div>
                 ))}
+            </div>
+
+            <div id="solve-hint-text">
+                Hold Shift to create hints {canMakeHints ? "(ON)" : "(OFF)"}
             </div>
         </div>
     );
