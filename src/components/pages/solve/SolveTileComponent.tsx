@@ -5,9 +5,11 @@ import { useDetectClickOutside } from "../../../hooks/useDetectClickOutside";
 import {
     selectIsTileEmpty,
     selectIsTileSet,
+    selectMakeHints,
     selectSolveTile
 } from "../../../redux/selectors";
 import { removeValue, updateValue } from "../../../redux/solve/solveSlice";
+import { range } from "../../../utils";
 
 /**
  * Tile for the solve page
@@ -25,6 +27,7 @@ export const SolveTileComponent = ({ row, column }: { row: number; column: numbe
     const causesError = solveData.causesError;
     const inError = solveData.inError;
     const isCorrect = solveData.isCorrect;
+    const canMakeHints = useSelector(selectMakeHints);
 
     const dispatch = useDispatch();
 
@@ -113,7 +116,13 @@ export const SolveTileComponent = ({ row, column }: { row: number; column: numbe
                     placeholder={isEmpty ? "" : value.toString()}
                 />
             ) : isEmpty ? (
-                ""
+                <div className="solve-tile-grid">
+                    {range(1, 9).map((value) => (
+                        <div className="solve-tile-grid-element flex-center" key={value}>
+                            {solveData.hints[value - 1] ? value : ""}
+                        </div>
+                    ))}
+                </div>
             ) : (
                 solveData.value
             )}
