@@ -341,6 +341,20 @@ export const solveSlice = createSlice({
 
         setMakeHints(state: SolveState, action: PayloadAction<boolean>) {
             state.makeHints = action.payload;
+        },
+
+        setHintEnabled(
+            state: SolveState,
+            action: PayloadAction<{
+                row: number;
+                column: number;
+                hintValue: number;
+                hintEnabled: boolean;
+            }>
+        ) {
+            const { row, column, hintValue, hintEnabled } = action.payload;
+
+            state.grid[row][column].hints[hintValue - 1] = hintEnabled;
         }
     }
 });
@@ -350,6 +364,7 @@ export const {
     setGrid,
     setGridAt,
     setGridFromFormat,
+    setHintEnabled,
     setMakeHints,
     updateValue
 } = solveSlice.actions;

@@ -8,7 +8,11 @@ import {
     selectMakeHints,
     selectSolveTile
 } from "../../../redux/selectors";
-import { removeValue, updateValue } from "../../../redux/solve/solveSlice";
+import {
+    removeValue,
+    setHintEnabled,
+    updateValue
+} from "../../../redux/solve/solveSlice";
 import { range } from "../../../utils";
 
 /**
@@ -57,29 +61,51 @@ export const SolveTileComponent = ({ row, column }: { row: number; column: numbe
             if (active) {
                 const key = event.key;
 
-                if (["1", "2", "3", "4", "5", "6", "7", "8", "9"].includes(key)) {
-                    // Set the tile to this value
-                    dispatch(
-                        updateValue({
-                            row,
-                            column,
-                            value: parseInt(key)
-                        })
-                    );
+                if (canMakeHints) {
+                    const keyCode = event.code;
 
-                    // Set this tile to inactive
-                    setActive(false);
-                } else if (key === "Backspace") {
-                    // Remove the value of this tile
-                    dispatch(
-                        removeValue({
-                            row,
-                            column
-                        })
-                    );
+                    // This checks if the keycode starts with Digit and the corresponding character is valid
+                    if (
+                        keyCode.length === 6 &&
+                        keyCode.startsWith("Digit") &&
+                        ["1", "2", "3", "4", "5", "6", "7", "8", "9"].includes(keyCode[5])
+                    ) {
+                        const value = parseInt(keyCode[5]);
 
-                    // Set this tile to inactive
-                    setActive(false);
+                        dispatch(
+                            setHintEnabled({
+                                row,
+                                column,
+                                hintValue: value,
+                                hintEnabled: !solveData.hints[value - 1]
+                            })
+                        );
+                    }
+                } else {
+                    if (["1", "2", "3", "4", "5", "6", "7", "8", "9"].includes(key)) {
+                        // Set the tile to this value
+                        dispatch(
+                            updateValue({
+                                row,
+                                column,
+                                value: parseInt(key)
+                            })
+                        );
+
+                        // Set this tile to inactive
+                        setActive(false);
+                    } else if (key === "Backspace") {
+                        // Remove the value of this tile
+                        dispatch(
+                            removeValue({
+                                row,
+                                column
+                            })
+                        );
+
+                        // Set this tile to inactive
+                        setActive(false);
+                    }
                 }
             }
         };
@@ -87,7 +113,7 @@ export const SolveTileComponent = ({ row, column }: { row: number; column: numbe
         document.addEventListener("keydown", onKeyPressed);
 
         return () => document.removeEventListener("keydown", onKeyPressed);
-    }, [dispatch, active, row, column]);
+    }, [dispatch, active, row, column, canMakeHints, solveData.hints]);
 
     // The tile contains an input element if it is active, otherwise it displays the current number
     return (
@@ -112,10 +138,13 @@ export const SolveTileComponent = ({ row, column }: { row: number; column: numbe
             {active ? (
                 <input
                     autoFocus
-                    className="solve-tile-input"
+                    className={classNames("solve-tile-input", canMakeHints ? "solve-tile-input-hints" : "")}
+                    value=""
                     placeholder={isEmpty ? "" : value.toString()}
                 />
-            ) : isEmpty ? (
+            ) : isEmpty ? "" : <div className="flex-center">{solveData.value}</div>}
+
+            {isEmpty && (
                 <div className="solve-tile-grid">
                     {range(1, 9).map((value) => (
                         <div className="solve-tile-grid-element flex-center" key={value}>
@@ -123,8 +152,6 @@ export const SolveTileComponent = ({ row, column }: { row: number; column: numbe
                         </div>
                     ))}
                 </div>
-            ) : (
-                solveData.value
             )}
         </div>
     );

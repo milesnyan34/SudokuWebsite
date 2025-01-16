@@ -33,6 +33,15 @@
     border: 1px solid black;
     font-size: 32px;
     user-select: none;
+
+    display: grid;
+    grid-template-rows: 100%;
+    grid-template-columns: 100%;
+}
+
+.solve-tile > div, input {
+    grid-row: 1;
+    grid-column: 1;
 }
 
 .solve-tile:hover {
@@ -61,6 +70,10 @@
     text-align: center;
     font-size: 32px;
     color: rgb(15, 70, 120);
+}
+
+.solve-tile-input-hints {
+    font-size: 18px;
 }
 
 .solve-tile-error {
