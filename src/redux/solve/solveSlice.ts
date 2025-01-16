@@ -236,6 +236,28 @@ export const solveSlice = createSlice({
                 hints: createHintsList() // Reset the hints
             };
 
+            // Remove hints corresponding to the filled in value that are in this row/column/box
+            for (let row2 = 0; row2 < GRID_SIZE; row2++) {
+                state.grid[row2][column].hints[value - 1] = false;
+            }
+
+            for (let column2 = 0; column2 < GRID_SIZE; column2++) {
+                state.grid[row][column2].hints[value - 1] = false;
+            }
+
+            const boxRow = Math.floor(row / BOX_SIZE);
+            const boxColumn = Math.floor(column / BOX_SIZE);
+
+            for (let row2 = boxRow * BOX_SIZE; row2 < (boxRow + 1) * BOX_SIZE; row2++) {
+                for (
+                    let col2 = boxColumn * BOX_SIZE;
+                    col2 < (boxColumn + 1) * BOX_SIZE;
+                    col2++
+                ) {
+                    state.grid[row2][col2].hints[value - 1] = false;
+                }
+            }
+
             state.grid = detectErrors(state.grid);
             state.importError = false;
         },
