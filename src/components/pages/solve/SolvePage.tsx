@@ -7,6 +7,7 @@ import {
     selectSudokuSolved
 } from "../../../redux/selectors";
 import {
+    setErrorCount,
     setGridFromFormat,
     setMakeHints,
     setSudokuSolved
@@ -41,6 +42,9 @@ const SolvePage = () => {
                 const fileText = new TextDecoder().decode(arrayBuffer);
 
                 dispatch(setGridFromFormat(fileText));
+
+                // Reset error count
+                dispatch(setErrorCount(0));
             });
         };
 
@@ -84,7 +88,7 @@ const SolvePage = () => {
 
             setSudokuSolved(false);
         }
-    }, [sudokuSolved, dispatch]);
+    }, [sudokuSolved, dispatch, errorCount]);
 
     // The 9x9 grid is basically a 3x3 grid of 3x3 boxes
     return (

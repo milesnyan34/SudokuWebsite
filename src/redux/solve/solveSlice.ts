@@ -264,12 +264,17 @@ export const solveSlice = createSlice({
 
         setSudokuSolved(state: SolveState, action: PayloadAction<boolean>) {
             state.sudokuSolved = action.payload;
+        },
+
+        setErrorCount(state: SolveState, action: PayloadAction<number>) {
+            state.errorCount = action.payload;
         }
     }
 });
 
 export const {
     removeValue,
+    setErrorCount,
     setGrid,
     setGridAt,
     setGridFromFormat,
