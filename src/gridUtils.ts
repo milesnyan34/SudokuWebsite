@@ -1,5 +1,25 @@
 import { SolveTile } from "./redux/solve/SolveTile";
-import { BOX_SIZE, Grid, GRID_SIZE, range } from "./utils";
+import { arraySum, BOX_SIZE, GRID_SIZE, range } from "./utils";
+
+/**
+ * Represents a 2D grid of values
+ */
+export type Grid<T> = Array<Array<T>>;
+
+/**
+ * Counts the number of values in a grid which match a predicate function
+ */
+export const gridCount = <T>(grid: Grid<T>, predicate: (value: T) => boolean): number =>
+    arraySum(grid.map((row) => row.filter(predicate).length));
+
+/**
+ * Maps a function over a 2D grid
+ * @param grid 
+ * @param fn 
+ * @returns 
+ */
+export const gridMap = <A, B>(grid: Grid<A>, fn: (value: A) => B): Grid<B> =>
+    grid.map((row) => row.map(fn));
 
 // Creates an empty grid
 const createGrid = (): Grid<SolveTile> => {

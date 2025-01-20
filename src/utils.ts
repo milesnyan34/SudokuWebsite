@@ -1,4 +1,3 @@
-
 /**
  * Size of the grid (rows and columns)
  */
@@ -15,11 +14,6 @@ export const BOX_SIZE = 3;
 export const TILES_THRESHOLD = 16;
 
 /**
- * Represents a 2D grid of values
- */
-export type Grid<T> = Array<Array<T>>;
-
-/**
  * Returns a range from low to high (inclusive)
  */
 export const range = (low: number, high: number): Array<number> => {
@@ -32,3 +26,9 @@ export const range = (low: number, high: number): Array<number> => {
     return result;
 };
 
+/**
+ * Returns the sum of an array
+ * @param array
+ * @returns
+ */
+export const arraySum = (array: number[]): number => array.reduce((a, b) => a + b);
