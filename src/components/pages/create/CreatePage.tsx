@@ -1,14 +1,21 @@
 import classNames from "classnames";
-import { useSelector } from "react-redux";
-import { selectSolution, selectStringFormat } from "../../../redux/selectors";
+import { useDispatch, useSelector } from "react-redux";
+import {
+    selectAutoUpdate,
+    selectSolution,
+    selectStringFormat
+} from "../../../redux/selectors";
 import { BOX_SIZE, range, TILES_THRESHOLD } from "../../../utils";
 import { CreateTileComponent } from "./CreateTileComponent";
+import { setAutoUpdate } from "../../../redux/create/createSudokuSlice";
 
 /**
  * Component for the Create Sudoku page
  * @returns
  */
 const CreatePage = () => {
+    const dispatch = useDispatch();
+
     const solution = useSelector(selectSolution);
 
     const solutionText =
@@ -21,6 +28,8 @@ const CreatePage = () => {
             : "Unique solution found!";
 
     const sudokuStringFormat = useSelector(selectStringFormat);
+
+    const autoUpdate = useSelector(selectAutoUpdate);
 
     // Runs when the export button is clicked
     const onExportClicked = () => {
@@ -47,7 +56,7 @@ const CreatePage = () => {
                     solution === "valid" ? "solution-text-valid" : "solution-text-invalid"
                 )}
             >
-                {solutionText}
+                {autoUpdate ? solutionText : ""}
             </div>
 
             <div id="solve-grid">
@@ -72,9 +81,19 @@ const CreatePage = () => {
                 ))}
             </div>
 
-            <button type="button" id="export-sudoku" onClick={onExportClicked}>
-                Export Sudoku
-            </button>
+            <div className="flex-center">
+                <button type="button" id="export-sudoku" onClick={onExportClicked}>
+                    Export Sudoku
+                </button>
+
+                <button
+                    type="button"
+                    id="auto-update"
+                    onClick={() => dispatch(setAutoUpdate(!autoUpdate))}
+                >
+                    Auto-Update: {autoUpdate ? "ON" : "OFF"}
+                </button>
+            </div>
         </div>
     );
 };

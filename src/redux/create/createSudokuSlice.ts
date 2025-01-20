@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createEmptyGrid, detectErrors, Grid } from "../../gridUtils";
 import { BOX_SIZE, GRID_SIZE, TILES_THRESHOLD } from "../../utils";
 import { SolveTile, TileState } from "../solve/SolveTile";
-import { createEmptyGrid, detectErrors, Grid } from "../../gridUtils";
 
 // Solution text type
 export type SolutionType = "multiple" | "none" | "valid" | "not enough tiles";
@@ -10,6 +10,7 @@ type CreateState = {
     // The grid is 9x9 (we can re-use the SolveTile class)
     grid: Grid<SolveTile>;
     solution: SolutionType;
+    autoUpdate: boolean;
 };
 
 // Find what solutions are possible
@@ -191,7 +192,8 @@ export const findSolution = (grid: Grid<SolveTile>): SolutionType => {
 // Creates the initial state for the sudoku
 export const createInitialState = (): CreateState => ({
     grid: createEmptyGrid(),
-    solution: "not enough tiles"
+    solution: "not enough tiles",
+    autoUpdate: true
 });
 
 const initialState = createInitialState();
@@ -222,7 +224,10 @@ export const createSudokuSlice = createSlice({
             };
 
             state.grid = detectErrors(state.grid);
-            state.solution = findSolution(state.grid);
+
+            if (state.autoUpdate) {
+                state.solution = findSolution(state.grid);
+            }
         },
 
         /**
@@ -246,7 +251,10 @@ export const createSudokuSlice = createSlice({
             };
 
             state.grid = detectErrors(state.grid);
-            state.solution = findSolution(state.grid);
+
+            if (state.autoUpdate) {
+                state.solution = findSolution(state.grid);
+            }
         },
 
         /**
@@ -258,7 +266,10 @@ export const createSudokuSlice = createSlice({
             state.grid = action.payload;
 
             state.grid = detectErrors(state.grid);
-            state.solution = findSolution(state.grid);
+
+            if (state.autoUpdate) {
+                state.solution = findSolution(state.grid);
+            }
         },
 
         /**
@@ -277,11 +288,24 @@ export const createSudokuSlice = createSlice({
             state.grid[action.payload.row][action.payload.column] = action.payload.tile;
 
             state.grid = detectErrors(state.grid);
-            state.solution = findSolution(state.grid);
+
+            if (state.autoUpdate) {
+                state.solution = findSolution(state.grid);
+            }
+        },
+
+        setAutoUpdate(state: CreateState, action: PayloadAction<boolean>) {
+            state.autoUpdate = action.payload;
+
+            // Re-update the solution if needed
+            if (action.payload) {
+                state.solution = findSolution(state.grid);
+            }
         }
     }
 });
 
-export const { removeValue, setGrid, setGridAt, updateValue } = createSudokuSlice.actions;
+export const { removeValue, setAutoUpdate, setGrid, setGridAt, updateValue } =
+    createSudokuSlice.actions;
 
 export default createSudokuSlice.reducer;

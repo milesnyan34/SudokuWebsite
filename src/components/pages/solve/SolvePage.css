@@ -116,7 +116,8 @@
 }
 
 #export-sudoku,
-#import-sudoku {
+#import-sudoku,
+#auto-update {
     margin: 20px;
 
     background-color: rgb(110, 110, 110);
@@ -127,13 +128,15 @@
 }
 
 #export-sudoku:hover,
-#import-sudoku:hover {
+#import-sudoku:hover,
+#auto-update:hover {
     background-color: rgb(141, 141, 141);
     cursor: pointer;
 }
 
 #export-sudoku:active,
-#import-sudoku:active {
+#import-sudoku:active,
+#auto-update:active {
     background-color: rgb(151, 151, 151);
     cursor: pointer;
 }

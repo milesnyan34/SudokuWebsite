@@ -101,8 +101,13 @@ export const selectMakeHints = (state: RootState): boolean => state.solve.makeHi
 
 export const selectSudokuSolved = (state: RootState): boolean => state.solve.sudokuSolved;
 
-export const selectSudokuAlerted = (state: RootState): boolean => state.solve.sudokuAlerted;
+export const selectSudokuAlerted = (state: RootState): boolean =>
+    state.solve.sudokuAlerted;
 
 export const selectErrorCount = (state: RootState): number => state.solve.errorCount;
 
-export const selectSudokuImported = (state: RootState): boolean => state.solve.sudokuImported;
+export const selectSudokuImported = (state: RootState): boolean =>
+    state.solve.sudokuImported;
+
+export const selectAutoUpdate = (state: RootState): boolean =>
+    state.createSudoku.autoUpdate;
