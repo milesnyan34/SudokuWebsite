@@ -1,10 +1,11 @@
 import reducer, {
     createInitialState,
     removeValue,
+    setGridAt,
     setGridFromFormat,
     updateValue
 } from "./solveSlice";
-import { TileState } from "./SolveTile";
+import { SolveTile, TileState } from "./SolveTile";
 
 describe("solveSlice", () => {
     test("updateValue", () => {
@@ -21,6 +22,87 @@ describe("solveSlice", () => {
 
         expect(state.grid[2][4].value).toBe(6);
         expect(state.grid[2][4].state).toBe(TileState.FILLED);
+    });
+
+    test("updateValue updates hints", () => {
+        let state = createInitialState();
+
+        state = reducer(
+            state,
+            setGridAt({
+                row: 2,
+                column: 2,
+                tile: SolveTile({
+                    hints: [true, true, true, false, false, false, false, true, true]
+                })
+            })
+        );
+
+        // Start with the same row
+        state = reducer(
+            state,
+            updateValue({
+                row: 2,
+                column: 5,
+                value: 3
+            })
+        );
+
+        expect(state.grid[2][2].hints).toEqual([
+            true,
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true,
+            true
+        ]);
+
+        // Now do the same column
+        state = reducer(
+            state,
+            updateValue({
+                row: 6,
+                column: 2,
+                value: 8
+            })
+        );
+
+        expect(state.grid[2][2].hints).toEqual([
+            true,
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+        ]);
+
+        // Now do the same box
+        state = reducer(
+            state,
+            updateValue({
+                row: 1,
+                column: 1,
+                value: 2
+            })
+        );
+
+        expect(state.grid[2][2].hints).toEqual([
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+        ]);
     });
 
     test("removeValue", () => {

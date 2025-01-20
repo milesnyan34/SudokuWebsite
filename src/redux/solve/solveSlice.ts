@@ -205,7 +205,7 @@ export const detectErrors = (grid: Grid<SolveTile>): Grid<SolveTile> => {
  * Removes hints for the row/column corresponding to the new tile
  * @param grid
  */
-export const gridRemoveHints = (
+const gridRemoveHints = (
     grid: Grid<SolveTile>,
     row: number,
     column: number,

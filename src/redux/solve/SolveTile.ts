@@ -34,15 +34,17 @@ export const createHintsList = () => [
 
 export const SolveTile = ({
     startValue = 0, // Starting value for the tile
-    hasStartValue = false // Should it have a starting value?
+    hasStartValue = false, // Should it have a starting value?
+    hints = createHintsList()
 }: {
     startValue?: number;
     hasStartValue?: boolean;
+    hints?: boolean[];
 }): SolveTile => ({
     value: startValue,
     state: hasStartValue ? TileState.SET : TileState.EMPTY,
     causesError: false,
     inError: false,
     isCorrect: false,
-    hints: createHintsList()
+    hints
 });

@@ -120,7 +120,7 @@ export const SolveTileComponent = ({ row, column }: { row: number; column: numbe
         <div
             ref={ref}
             className={classNames(
-                "solve-tile",
+                "solve-tile solve-tile-solve",
                 "flex-center",
                 isSet ? "solve-tile-set" : "solve-tile-unset", // Set/unset tiles
                 active && "solve-tile-active", // The active tile

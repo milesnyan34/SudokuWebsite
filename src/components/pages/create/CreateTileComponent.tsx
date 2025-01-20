@@ -91,7 +91,7 @@ export const CreateTileComponent = ({ row, column }: { row: number; column: numb
         <div
             ref={ref}
             className={classNames(
-                "solve-tile",
+                "solve-tile solve-tile-create",
                 "flex-center",
                 "solve-tile-set",
                 active && "solve-tile-active", // The active tile

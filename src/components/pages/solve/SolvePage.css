@@ -33,13 +33,15 @@
     border: 1px solid black;
     font-size: 32px;
     user-select: none;
+}
 
+.solve-tile-solve {
     display: grid;
     grid-template-rows: 100%;
     grid-template-columns: 100%;
 }
 
-.solve-tile > div, input {
+.solve-tile-solve > div, input {
     grid-row: 1;
     grid-column: 1;
 }
