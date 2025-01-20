@@ -1,6 +1,6 @@
+import { createSudokuGrid } from "../gridUtils";
 import { setGrid } from "./create/createSudokuSlice";
 import { selectStringFormat } from "./selectors";
-import { createSudokuGrid } from "./solve/solveSlice";
 import { createStore } from "./store";
 
 describe("selectors", () => {

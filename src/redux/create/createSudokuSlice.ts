@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { BOX_SIZE, Grid, GRID_SIZE, TILES_THRESHOLD } from "../../utils";
-import { createEmptyGrid, detectErrors } from "../solve/solveSlice";
 import { SolveTile, TileState } from "../solve/SolveTile";
+import { createEmptyGrid, detectErrors } from "../../gridUtils";
 
 // Solution text type
 export type SolutionType = "multiple" | "none" | "valid" | "not enough tiles";
@@ -198,19 +198,6 @@ const initialState = createInitialState();
 
 export const createSudokuSlice = createSlice({
     name: "create",
-    // initialState: Object.assign(initialState, {
-    //     grid: createSudokuGrid([
-    //         [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    //         [0, 1, 5, 0, 0, 0, 0, 0, 0],
-    //         [0, 0, 0, 0, 3, 0, 0, 0, 0],
-    //         [0, 0, 0, 0, 0, 7, 0, 0, 0],
-    //         [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    //         [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    //         [0, 0, 0, 0, 0, 0, 0, 2, 0],
-    //         [0, 0, 0, 0, 0, 0, 8, 0, 0],
-    //         [0, 0, 0, 0, 0, 0, 0, 0, 0]
-    //     ])
-    // }),
     initialState,
     reducers: {
         /**

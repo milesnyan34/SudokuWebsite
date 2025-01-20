@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import { Provider } from "react-redux";
-import { createEmptyGrid, setGrid, setGridAt } from "../../../redux/solve/solveSlice";
+import { createEmptyGrid } from "../../../gridUtils";
+import { setGrid, setGridAt } from "../../../redux/solve/solveSlice";
 import { SolveTile } from "../../../redux/solve/SolveTile";
 import { createStore } from "../../../redux/store";
 import { clickElement, matchesClasses } from "../../../testUtils";

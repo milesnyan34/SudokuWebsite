@@ -1,3 +1,4 @@
+
 /**
  * Size of the grid (rows and columns)
  */
@@ -30,3 +31,4 @@ export const range = (low: number, high: number): Array<number> => {
 
     return result;
 };
+
