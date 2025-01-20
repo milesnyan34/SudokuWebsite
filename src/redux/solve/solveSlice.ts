@@ -67,6 +67,16 @@ export const isGridSolved = (grid: Grid<SolveTile>): boolean => {
     return true;
 };
 
+/**
+ * Shared operations to occur after the grid is updated
+ * @param state
+ */
+const processState = (state: SolveState) => {
+    state.grid = detectErrors(state.grid);
+    state.importError = false;
+    state.sudokuSolved = isGridSolved(state.grid);
+};
+
 // Creates the initial state for the sudoku
 export const createInitialState = (): SolveState => ({
     grid: createEmptyGrid(),
@@ -105,9 +115,8 @@ export const solveSlice = createSlice({
             };
 
             state.grid = gridRemoveHints(state.grid, row, column, value);
-            state.grid = detectErrors(state.grid);
-            state.importError = false;
-            state.sudokuSolved = isGridSolved(state.grid);
+
+            processState(state);
         },
 
         /**
@@ -130,9 +139,7 @@ export const solveSlice = createSlice({
                 state: TileState.EMPTY
             };
 
-            state.grid = detectErrors(state.grid);
-            state.importError = false;
-            state.sudokuSolved = isGridSolved(state.grid);
+            processState(state);
         },
 
         /**
@@ -143,8 +150,7 @@ export const solveSlice = createSlice({
         setGrid(state: SolveState, action: PayloadAction<Grid<SolveTile>>) {
             state.grid = action.payload;
 
-            state.grid = detectErrors(state.grid);
-            state.sudokuSolved = isGridSolved(state.grid);
+            processState(state);
         },
 
         /**
@@ -162,8 +168,7 @@ export const solveSlice = createSlice({
         ) {
             state.grid[action.payload.row][action.payload.column] = action.payload.tile;
 
-            state.grid = detectErrors(state.grid);
-            state.sudokuSolved = isGridSolved(state.grid);
+            processState(state);
         },
 
         /**
@@ -205,9 +210,9 @@ export const solveSlice = createSlice({
                 }
 
                 if (success) {
-                    state.grid = detectErrors(createSudokuGrid(newGrid));
-                    state.importError = false;
-                    state.sudokuSolved = isGridSolved(state.grid);
+                    state.grid = createSudokuGrid(newGrid);
+
+                    processState(state);
                 } else {
                     state.importError = true;
                 }
