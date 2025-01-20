@@ -104,3 +104,5 @@ export const selectSudokuSolved = (state: RootState): boolean => state.solve.sud
 export const selectSudokuAlerted = (state: RootState): boolean => state.solve.sudokuAlerted;
 
 export const selectErrorCount = (state: RootState): number => state.solve.errorCount;
+
+export const selectSudokuImported = (state: RootState): boolean => state.solve.sudokuImported;

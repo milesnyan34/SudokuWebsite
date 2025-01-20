@@ -27,6 +27,9 @@ type SolveState = {
 
     // Number of errors committed
     errorCount: number;
+
+    // Has a sudoku been imported?
+    sudokuImported: boolean;
 };
 
 /**
@@ -112,7 +115,8 @@ export const createInitialState = (): SolveState => ({
     makeHints: false,
     sudokuSolved: false,
     sudokuAlerted: false,
-    errorCount: 0
+    errorCount: 0,
+    sudokuImported: false
 });
 
 const initialState = createInitialState();
@@ -239,6 +243,7 @@ export const solveSlice = createSlice({
                 }
 
                 if (success) {
+                    state.sudokuImported = true;
                     state.grid = createSudokuGrid(newGrid);
 
                     processState(state);

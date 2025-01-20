@@ -5,6 +5,7 @@ import {
     selectImportError,
     selectMakeHints,
     selectSudokuAlerted,
+    selectSudokuImported,
     selectSudokuSolved
 } from "../../../redux/selectors";
 import {
@@ -33,6 +34,8 @@ const SolvePage = () => {
     const sudokuAlerted = useSelector(selectSudokuAlerted);
 
     const errorCount = useSelector(selectErrorCount);
+
+    const sudokuImported = useSelector(selectSudokuImported);
 
     const onImportClicked = () => {
         const filePicker = document.createElement("input");
@@ -111,33 +114,39 @@ const SolvePage = () => {
                 </div>
             </div>
 
-            <div id="solve-grid">
-                {range(0, BOX_SIZE - 1).map((boxRow) => (
-                    <div className="grid-row" key={boxRow}>
-                        {range(0, BOX_SIZE - 1).map((boxColumn) => (
-                            <div className="grid-box" key={boxColumn}>
-                                {range(0, BOX_SIZE - 1).map((row) => (
-                                    <div className="box-row" key={row}>
-                                        {range(0, BOX_SIZE - 1).map((column) => (
-                                            <SolveTileComponent
-                                                key={column}
-                                                row={boxRow * BOX_SIZE + row}
-                                                column={boxColumn * BOX_SIZE + column}
-                                            />
+            {sudokuImported && (
+                <div className="flex-center-column">
+                    <div id="solve-grid">
+                        {range(0, BOX_SIZE - 1).map((boxRow) => (
+                            <div className="grid-row" key={boxRow}>
+                                {range(0, BOX_SIZE - 1).map((boxColumn) => (
+                                    <div className="grid-box" key={boxColumn}>
+                                        {range(0, BOX_SIZE - 1).map((row) => (
+                                            <div className="box-row" key={row}>
+                                                {range(0, BOX_SIZE - 1).map((column) => (
+                                                    <SolveTileComponent
+                                                        key={column}
+                                                        row={boxRow * BOX_SIZE + row}
+                                                        column={
+                                                            boxColumn * BOX_SIZE + column
+                                                        }
+                                                    />
+                                                ))}
+                                            </div>
                                         ))}
                                     </div>
                                 ))}
                             </div>
                         ))}
                     </div>
-                ))}
-            </div>
 
-            <div id="solve-hint-text">
-                Hold Shift to create hints {canMakeHints ? "(ON)" : "(OFF)"}
-            </div>
+                    <div id="solve-hint-text">
+                        Hold Shift to create hints {canMakeHints ? "(ON)" : "(OFF)"}
+                    </div>
 
-            <div id="solve-errors-count">Total Errors: {errorCount}</div>
+                    <div id="solve-errors-count">Total Errors: {errorCount}</div>
+                </div>
+            )}
         </div>
     );
 };
