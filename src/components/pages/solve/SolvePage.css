@@ -168,6 +168,10 @@
     margin-top: 10px;
 }
 
+#solve-errors-count {
+    margin-top: 10px;
+}
+
 .solve-tile-grid {
     width: 100%;
     height: 100%;

@@ -100,3 +100,5 @@ export const selectImportError = (state: RootState): boolean => state.solve.impo
 export const selectMakeHints = (state: RootState): boolean => state.solve.makeHints;
 
 export const selectSudokuSolved = (state: RootState): boolean => state.solve.sudokuSolved;
+
+export const selectErrorCount = (state: RootState): number => state.solve.errorCount;

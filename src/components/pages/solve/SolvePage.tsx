@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
+    selectErrorCount,
     selectImportError,
     selectMakeHints,
     selectSudokuSolved
@@ -26,6 +27,8 @@ const SolvePage = () => {
     const canMakeHints = useSelector(selectMakeHints);
 
     const sudokuSolved = useSelector(selectSudokuSolved);
+
+    const errorCount = useSelector(selectErrorCount);
 
     const onImportClicked = () => {
         const filePicker = document.createElement("input");
@@ -116,6 +119,8 @@ const SolvePage = () => {
             <div id="solve-hint-text">
                 Hold Shift to create hints {canMakeHints ? "(ON)" : "(OFF)"}
             </div>
+
+            <div id="solve-errors-count">Total Errors: {errorCount}</div>
         </div>
     );
 };

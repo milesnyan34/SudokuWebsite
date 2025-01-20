@@ -1,7 +1,13 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import {
+    createEmptyGrid,
+    createSudokuGrid,
+    detectErrors,
+    Grid,
+    gridCount
+} from "../../gridUtils";
 import { BOX_SIZE, GRID_SIZE } from "../../utils";
 import { createHintsList, SolveTile, TileState } from "./SolveTile";
-import { createEmptyGrid, createSudokuGrid, detectErrors, Grid } from "../../gridUtils";
 
 type SolveState = {
     // The grid is 9x9
@@ -68,12 +74,31 @@ export const isGridSolved = (grid: Grid<SolveTile>): boolean => {
 };
 
 /**
- * Shared operations to occur after the grid is updated
+ * Shared operations to occur after the grid is updated (row and column are -1 if they are not relevant)
  * @param state
  */
-const processState = (state: SolveState) => {
+const processState = (state: SolveState, row: number = -1, column: number = -1) => {
+    // To determine if a new error was committed, track the most recent move (row, column)
+    // If this move now has an error, then increment the counter
+
+    // Detect any errors
     state.grid = detectErrors(state.grid);
+
+    if (gridCount(state.grid, (tile) => tile.inError) > 0) {
+        if (row >= 0 && column >= 0) {
+            // Check that value
+            const recentTile = state.grid[row][column];
+
+            if (recentTile.causesError) {
+                state.errorCount++;
+            }
+        }
+    }
+
+    // Any import error no longer matters since a new action has occurred
     state.importError = false;
+
+    // Check if the sudoku is solved
     state.sudokuSolved = isGridSolved(state.grid);
 };
 
@@ -116,7 +141,7 @@ export const solveSlice = createSlice({
 
             state.grid = gridRemoveHints(state.grid, row, column, value);
 
-            processState(state);
+            processState(state, row, column);
         },
 
         /**
@@ -139,7 +164,7 @@ export const solveSlice = createSlice({
                 state: TileState.EMPTY
             };
 
-            processState(state);
+            processState(state, row, column);
         },
 
         /**
@@ -168,7 +193,7 @@ export const solveSlice = createSlice({
         ) {
             state.grid[action.payload.row][action.payload.column] = action.payload.tile;
 
-            processState(state);
+            processState(state, action.payload.row, action.payload.column);
         },
 
         /**
