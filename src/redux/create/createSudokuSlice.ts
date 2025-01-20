@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { BOX_SIZE, Grid, GRID_SIZE, TILES_THRESHOLD } from "../../utils";
+import { BOX_SIZE, GRID_SIZE, TILES_THRESHOLD } from "../../utils";
 import { SolveTile, TileState } from "../solve/SolveTile";
-import { createEmptyGrid, detectErrors } from "../../gridUtils";
+import { createEmptyGrid, detectErrors, Grid } from "../../gridUtils";
 
 // Solution text type
 export type SolutionType = "multiple" | "none" | "valid" | "not enough tiles";

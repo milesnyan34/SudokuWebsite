@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { BOX_SIZE, Grid, GRID_SIZE } from "../../utils";
+import { BOX_SIZE, GRID_SIZE } from "../../utils";
 import { createHintsList, SolveTile, TileState } from "./SolveTile";
-import { createEmptyGrid, createSudokuGrid, detectErrors } from "../../gridUtils";
+import { createEmptyGrid, createSudokuGrid, detectErrors, Grid } from "../../gridUtils";
 
 type SolveState = {
     // The grid is 9x9
