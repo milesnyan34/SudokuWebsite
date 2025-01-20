@@ -3,5 +3,4 @@ Two main modes, Create and Play
 Create mode lets you design your own Sudoku, and tells you if it is possible.
 Play mode lets you play a Sudoku, which you can import from a file maybe
 
-Maybe let the create page import sudokus too?
 Add an option to the create page to not auto-update
