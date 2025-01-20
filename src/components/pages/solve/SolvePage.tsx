@@ -9,7 +9,6 @@ import {
     selectSudokuSolved
 } from "../../../redux/selectors";
 import {
-    setErrorCount,
     setGridFromFormat,
     setMakeHints,
     setSudokuAlerted
