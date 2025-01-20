@@ -73,7 +73,14 @@ const SolvePage = () => {
     // Alert the user when the sudoku is solved
     useEffect(() => {
         if (sudokuSolved) {
-            alert("Congrats on solving the sudoku!");
+            const errorText =
+                errorCount === 0
+                    ? "no errors!"
+                    : errorCount === 1
+                    ? "1 error!"
+                    : `${errorCount} errors!`;
+
+            alert(`Congrats on solving the sudoku! You committed ${errorText}`);
 
             setSudokuSolved(false);
         }
