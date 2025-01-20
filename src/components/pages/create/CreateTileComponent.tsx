@@ -110,6 +110,7 @@ export const CreateTileComponent = ({ row, column }: { row: number; column: numb
                 <input
                     autoFocus
                     className="solve-tile-input"
+                    value=""
                     placeholder={isEmpty ? "" : value.toString()}
                 />
             ) : isEmpty ? (

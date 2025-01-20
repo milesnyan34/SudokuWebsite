@@ -142,7 +142,7 @@ export const SolveTileComponent = ({ row, column }: { row: number; column: numbe
                         "solve-tile-input",
                         canMakeHints ? "solve-tile-input-hints" : ""
                     )}
-                    defaultValue=""
+                    value=""
                     placeholder={isEmpty ? "" : value.toString()}
                 />
             ) : isEmpty ? (
