@@ -13,6 +13,7 @@ export const HeaderButton = ({ page, text }: { page: AppPage; text: string }) =>
 
     return (
         <button
+            data-testid={`header-button-${text}`}
             className={classNames(
                 "header-button",
                 currentPage === page ? "header-button-active" : ""
@@ -23,4 +24,3 @@ export const HeaderButton = ({ page, text }: { page: AppPage; text: string }) =>
         </button>
     );
 };
-    

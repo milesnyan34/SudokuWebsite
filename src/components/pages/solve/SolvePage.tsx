@@ -78,7 +78,7 @@ const SolvePage = () => {
 
     // The 9x9 grid is basically a 3x3 grid of 3x3 boxes
     return (
-        <div id="solve-page" className="flex-center-column">
+        <div id="solve-page" data-testid="solve-page" className="flex-center-column">
             <div className="import-sudoku-row">
                 <div id="import-sudoku-container" className="flex-center">
                     <button id="import-sudoku" type="button" onClick={onImportClicked}>

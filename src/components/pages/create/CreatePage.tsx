@@ -40,7 +40,7 @@ const CreatePage = () => {
 
     // The 9x9 grid is basically a 3x3 grid of 3x3 boxes
     return (
-        <div id="solve-page" className="flex-center-column">
+        <div id="create-page" data-testid="create-page" className="flex-center-column">
             <div
                 className={classNames(
                     "solution-text",
