@@ -243,10 +243,20 @@ export const solveSlice = createSlice({
                 }
 
                 if (success) {
-                    state.sudokuImported = true;
-                    state.grid = createSudokuGrid(newGrid);
+                    const grid = detectErrors(createSudokuGrid(newGrid));
 
-                    processState(state);
+                    if (gridCount(grid, (tile) => tile.inError) > 0) {
+                        state.importError = true;
+                    } else {
+                        state.sudokuImported = true;
+                        state.grid = grid;
+
+                        // Reset error count for a successful import
+                        state.errorCount = 0;
+                        state.sudokuAlerted = false;
+
+                        processState(state);
+                    }
                 } else {
                     state.importError = true;
                 }

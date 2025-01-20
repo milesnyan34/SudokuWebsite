@@ -48,12 +48,6 @@ const SolvePage = () => {
                 const fileText = new TextDecoder().decode(arrayBuffer);
 
                 dispatch(setGridFromFormat(fileText));
-
-                // Reset error count
-                dispatch(setErrorCount(0));
-
-                // Reset alerted stat
-                dispatch(setSudokuAlerted(false));
             });
         };
 

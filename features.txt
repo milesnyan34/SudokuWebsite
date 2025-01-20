@@ -6,4 +6,3 @@ Play mode lets you play a Sudoku, which you can import from a file maybe
 Maybe let the create page import sudokus too?
 Add an option to the create page to not auto-update
 Maybe importing a sudoku with errors should not work.
-Solve page should only work if you have a sudoku imported
