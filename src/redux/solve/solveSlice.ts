@@ -11,6 +11,9 @@ type SolveState = {
 
     // Are hints being created?
     makeHints: boolean;
+
+    // Has the sudoku been solved?
+    sudokuSolved: boolean;
 };
 
 // Creates an empty grid
@@ -236,7 +239,8 @@ const gridRemoveHints = (
 export const createInitialState = (): SolveState => ({
     grid: createEmptyGrid(),
     importError: false,
-    makeHints: false
+    makeHints: false,
+    sudokuSolved: false
 });
 
 const initialState = createInitialState();
@@ -388,6 +392,10 @@ export const solveSlice = createSlice({
             const { row, column, hintValue, hintEnabled } = action.payload;
 
             state.grid[row][column].hints[hintValue - 1] = hintEnabled;
+        },
+
+        setSudokuSolved(state: SolveState, action: PayloadAction<boolean>) {
+            state.sudokuSolved = action.payload;
         }
     }
 });
@@ -399,6 +407,7 @@ export const {
     setGridFromFormat,
     setHintEnabled,
     setMakeHints,
+    setSudokuSolved,
     updateValue
 } = solveSlice.actions;
 
