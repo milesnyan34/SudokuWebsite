@@ -14,6 +14,9 @@ type SolveState = {
 
     // Has the sudoku been solved?
     sudokuSolved: boolean;
+
+    // Number of errors committed
+    errorCount: number;
 };
 
 // Creates an empty grid
@@ -256,7 +259,8 @@ export const createInitialState = (): SolveState => ({
     grid: createEmptyGrid(),
     importError: false,
     makeHints: false,
-    sudokuSolved: false
+    sudokuSolved: false,
+    errorCount: 0
 });
 
 const initialState = createInitialState();
