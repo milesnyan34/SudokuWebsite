@@ -235,6 +235,22 @@ const gridRemoveHints = (
     return grid;
 };
 
+/**
+ * Returns if a grid is solved
+ * @param grid 
+ */
+export const isGridSolved = (grid: Grid<SolveTile>): boolean => {
+    for (const row of grid) {
+        for (const tile of row) {
+            if (tile.inError || tile.state === TileState.EMPTY) {
+                return false;
+            }
+        }
+    }
+
+    return true;
+}
+
 // Creates the initial state for the sudoku
 export const createInitialState = (): SolveState => ({
     grid: createEmptyGrid(),
@@ -274,6 +290,7 @@ export const solveSlice = createSlice({
             state.grid = gridRemoveHints(state.grid, row, column, value);
             state.grid = detectErrors(state.grid);
             state.importError = false;
+            state.sudokuSolved = isGridSolved(state.grid);
         },
 
         /**
@@ -298,6 +315,7 @@ export const solveSlice = createSlice({
 
             state.grid = detectErrors(state.grid);
             state.importError = false;
+            state.sudokuSolved = isGridSolved(state.grid);
         },
 
         /**
@@ -309,6 +327,7 @@ export const solveSlice = createSlice({
             state.grid = action.payload;
 
             state.grid = detectErrors(state.grid);
+            state.sudokuSolved = isGridSolved(state.grid);
         },
 
         /**
@@ -327,6 +346,7 @@ export const solveSlice = createSlice({
             state.grid[action.payload.row][action.payload.column] = action.payload.tile;
 
             state.grid = detectErrors(state.grid);
+            state.sudokuSolved = isGridSolved(state.grid);
         },
 
         /**
@@ -370,6 +390,7 @@ export const solveSlice = createSlice({
                 if (success) {
                     state.grid = detectErrors(createSudokuGrid(newGrid));
                     state.importError = false;
+                    state.sudokuSolved = isGridSolved(state.grid);
                 } else {
                     state.importError = true;
                 }

@@ -1,7 +1,15 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { selectImportError, selectMakeHints } from "../../../redux/selectors";
-import { setGridFromFormat, setMakeHints } from "../../../redux/solve/solveSlice";
+import {
+    selectImportError,
+    selectMakeHints,
+    selectSudokuSolved
+} from "../../../redux/selectors";
+import {
+    setGridFromFormat,
+    setMakeHints,
+    setSudokuSolved
+} from "../../../redux/solve/solveSlice";
 import { BOX_SIZE, range } from "../../../utils";
 import "./SolvePage.css";
 import { SolveTileComponent } from "./SolveTileComponent";
@@ -16,6 +24,8 @@ const SolvePage = () => {
     const importError = useSelector(selectImportError);
 
     const canMakeHints = useSelector(selectMakeHints);
+
+    const sudokuSolved = useSelector(selectSudokuSolved);
 
     const onImportClicked = () => {
         const filePicker = document.createElement("input");
@@ -56,6 +66,15 @@ const SolvePage = () => {
             document.removeEventListener("keyup", offListener);
         };
     });
+
+    // Alert the user when the sudoku is solved
+    useEffect(() => {
+        if (sudokuSolved) {
+            alert("Congrats on solving the sudoku!");
+
+            setSudokuSolved(false);
+        }
+    }, [sudokuSolved, dispatch]);
 
     // The 9x9 grid is basically a 3x3 grid of 3x3 boxes
     return (

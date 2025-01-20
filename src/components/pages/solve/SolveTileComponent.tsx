@@ -138,11 +138,18 @@ export const SolveTileComponent = ({ row, column }: { row: number; column: numbe
             {active ? (
                 <input
                     autoFocus
-                    className={classNames("solve-tile-input", canMakeHints ? "solve-tile-input-hints" : "")}
-                    value=""
+                    className={classNames(
+                        "solve-tile-input",
+                        canMakeHints ? "solve-tile-input-hints" : ""
+                    )}
+                    defaultValue=""
                     placeholder={isEmpty ? "" : value.toString()}
                 />
-            ) : isEmpty ? "" : <div className="flex-center">{solveData.value}</div>}
+            ) : isEmpty ? (
+                ""
+            ) : (
+                <div className="flex-center">{solveData.value}</div>
+            )}
 
             {isEmpty && (
                 <div className="solve-tile-grid">
