@@ -4,13 +4,14 @@ import {
     selectErrorCount,
     selectImportError,
     selectMakeHints,
+    selectSudokuAlerted,
     selectSudokuSolved
 } from "../../../redux/selectors";
 import {
     setErrorCount,
     setGridFromFormat,
     setMakeHints,
-    setSudokuSolved
+    setSudokuAlerted
 } from "../../../redux/solve/solveSlice";
 import { BOX_SIZE, range } from "../../../utils";
 import "./SolvePage.css";
@@ -29,6 +30,8 @@ const SolvePage = () => {
 
     const sudokuSolved = useSelector(selectSudokuSolved);
 
+    const sudokuAlerted = useSelector(selectSudokuAlerted);
+
     const errorCount = useSelector(selectErrorCount);
 
     const onImportClicked = () => {
@@ -45,6 +48,9 @@ const SolvePage = () => {
 
                 // Reset error count
                 dispatch(setErrorCount(0));
+
+                // Reset alerted stat
+                dispatch(setSudokuAlerted(false));
             });
         };
 
@@ -76,7 +82,7 @@ const SolvePage = () => {
 
     // Alert the user when the sudoku is solved
     useEffect(() => {
-        if (sudokuSolved) {
+        if (sudokuSolved && !sudokuAlerted) {
             const errorText =
                 errorCount === 0
                     ? "no errors!"
@@ -86,9 +92,9 @@ const SolvePage = () => {
 
             alert(`Congrats on solving the sudoku! You committed ${errorText}`);
 
-            setSudokuSolved(false);
+            dispatch(setSudokuAlerted(true));
         }
-    }, [sudokuSolved, dispatch, errorCount]);
+    }, [sudokuSolved, dispatch, errorCount, sudokuAlerted]);
 
     // The 9x9 grid is basically a 3x3 grid of 3x3 boxes
     return (

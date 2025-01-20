@@ -22,6 +22,9 @@ type SolveState = {
     // Has the sudoku been solved?
     sudokuSolved: boolean;
 
+    // Has the sudoku given an alert already?
+    sudokuAlerted: boolean;
+
     // Number of errors committed
     errorCount: number;
 };
@@ -108,6 +111,7 @@ export const createInitialState = (): SolveState => ({
     importError: false,
     makeHints: false,
     sudokuSolved: false,
+    sudokuAlerted: false,
     errorCount: 0
 });
 
@@ -266,6 +270,10 @@ export const solveSlice = createSlice({
             state.sudokuSolved = action.payload;
         },
 
+        setSudokuAlerted(state: SolveState, action: PayloadAction<boolean>) {
+            state.sudokuAlerted = action.payload;
+        },
+
         setErrorCount(state: SolveState, action: PayloadAction<number>) {
             state.errorCount = action.payload;
         }
@@ -280,6 +288,7 @@ export const {
     setGridFromFormat,
     setHintEnabled,
     setMakeHints,
+    setSudokuAlerted,
     setSudokuSolved,
     updateValue
 } = solveSlice.actions;
